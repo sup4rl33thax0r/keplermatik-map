@@ -4,9 +4,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "echo",
+            "label": "build-assemble",
             "type": "shell",
-            "command": "echo Hello"
+            "command": "tasks/build-assemble.sh",
+            "args": [
+                "keplermatik"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
