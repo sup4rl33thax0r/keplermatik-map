@@ -15,6 +15,15 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "build-test",
+            "type": "shell",
+            "command": "tasks/build-test.sh",
+            "args": [
+                "keplermatik"
+            ],
+            "problemMatcher": [],
         }
     ]
 }
