@@ -33,7 +33,7 @@
    30 |  1 keplermatik.s     30 | Equivalence | 11 |         |    0 | 00/8000               | YTEMP       EQU   $EF            
    31 |  1 keplermatik.s     31 | Equivalence | 11 |         |    0 | 00/8000               | RAMPAGE     EQU   $06            
    32 |  1 keplermatik.s     32 | Comment     | 11 |         |    0 | 00/8000               | *
-   33 |  1 keplermatik.s     33 | Code        | 11 |         |    3 | 00/8000 : 20 19 80    | MAIN        JSR   OPEN           
+   33 |  1 keplermatik.s     33 | Code        | 11 |         |    3 | 00/8000 : 20 A5 81    | MAIN        JSR   REMOVE         
    34 |  1 keplermatik.s     34 | Code        | 11 |         |    3 | 00/8003 : 20 19 80    |             JSR   OPEN           
    35 |  1 keplermatik.s     35 | Code        | 11 |         |    2 | 00/8006 : D0 07       |             BNE   ERROR          
    36 |  1 keplermatik.s     36 | Code        | 11 |         |    3 | 00/8008 : 20 20 80    |             JSR   READ           
