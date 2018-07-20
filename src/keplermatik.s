@@ -201,7 +201,7 @@ EORCHK   LDA   GFXPTR
          BNE   CHKBOXP
          LDA   GFXPTR+1   ; CHECK LOW BYTE
          CMP   #$A7       ; FIRST GAP IN FRAMEBUFFER MAP
-         BEQ   GP3FA7`
+         BEQ   GP3FA7
          CMP   #$CF       ; SECOND GAP IN FRAMEBUFFER MAP
          BEQ   GP3FCF
          CMP   #$F7       ; END OF FILE
