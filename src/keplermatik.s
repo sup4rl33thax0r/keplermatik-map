@@ -1,5 +1,5 @@
 ********************************
-* KEPLERMATIK                  *
+* KEPLERMATIK 0.1              *
 * ===========                  *
 * LOADS MAP.BMP FROM DISK TO   *
 * $4000, THEN DE-INTERLEAVES   *
