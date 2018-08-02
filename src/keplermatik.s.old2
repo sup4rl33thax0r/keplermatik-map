@@ -80,48 +80,18 @@ CLOSE    LDA   #1
          DFB   READCMD
          DW    PARAMS
          RTS
-
-***************************
-*                   Write *
-*                   ----- *
-* 80STORE    off    $C000 *
-*            on     $C001 *
-* RAMRD      off    $C002 *
-*            on     $C003 *   
-* RAMWRT     off    $C004 *    
-*            on     $C005 *
-* PAGE2      off    $C054 *
-*            on     $C055 *
-* HIRES      off    $C056 *
-*            on     $C057 *
 *
-* For AUX:
-* 80STORE ON: $C001
-* PAGE2   ON: $C055
-* HIRES   ON: $C057
-* RAMRD  OFF: $C002
-* RAMWRT OFF: $C004
-*
-* For MAIN:
-* 80STORE ON: $C001
-* PAGE2  OFF: $C054
-* HIRES   ON: $C057
-* RAMRD  OFF: $C002
-* RAMWRT OFF: $C004
-***************************
 LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          STA   GFXPTR
          LDA   #>GFXBASE
          STA   GFXPTR+1
          LDA   #$C0
          STA   RAMPAGE+1
-         LDA   #$55
+         LDA   #$05
          STA   RAMPAGE
-         STA   $C001      ;80STORE ON
+         STA   $C000      ;80STORE OFF
          STA   $C002      ;RAMRD OFF
-         STA   $C004      ;RAMWRT OFF
-         STA   $C055      ;PAGE2 ON
-         STA   $C057      ;HIRES ON
+         STA   $C005      ;RAMWRT ON
          LDX   #$00       ;SET UP INCREMENTS TO 0
          LDY   #$0A       ;GET BITMAP OFFSET FROM FILE POSITION $000A
 
@@ -141,15 +111,15 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          STA   BMPSTART+1
         
          CLC
-         LDA   #$20             ; INITIALIZE BMPPTR
+         LDA   #$3A             ; INITIALIZE BMPPTR
          ;LDA   #$00
          ADC   BMPSTART 
-         LDA   #$AE        ; 16-BIT ADD $343A TO BMPSTART TO GET
+         LDA   #$78        ; 16-BIT ADD $343A TO BMPSTART TO GET
          STA   BMPPTR           ; START OF LINE 1 AND STORE IN BMPPTR
-         LDA   #$35             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
+         LDA   #$34             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
          ;LDA   #$00
          ADC   BMPSTART+1       ; TO FRAME BUFFER =)
-         LDA   #$75
+         LDA   #$74
          STA   BMPPTR+1
 
          LDY   #$06           ; FRAMEBUFFER USES 7 BITS PER BYTE
@@ -161,10 +131,6 @@ BEGINROW LDA   GFXPTR         ; CALCULATE EOR + 1
          LDA   GFXPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
          ADC   #$00           ; INCREMENT GFXPTR
          STA   GFXEOR+1
-         LDA   #$00
-         STA   GFXPTR
-
-         
 
 PIXPOKEY STY   YTEMP          ; TEMP STORE Y
          LDY   #$00
@@ -188,31 +154,18 @@ RSTGFXP  ;LDA   (GFXPTR),Y
          ;ROL
          ;STA   (GFXPTR),Y
          LDA   RAMPAGE
-         CMP   #$54
+         CMP   #$05
          BEQ   RSTGFXP2
-         LDA   #$54
+         LDA   #$05
          STA   RAMPAGE
          JMP   RSTGFXP3
-RSTGFXP2 LDA   #$55
+RSTGFXP2 LDA   #$04
          STA   RAMPAGE
-         ;INC   GFXPTR
-         CLC
-         LDA   GFXPTR         ; CALCULATE EOR + 1
-         ADC   #$01           ; HARDCODED FOR DOUBLE HIRES
-         STA   GFXPTR         ; WE CHECK FOR THIS LATER TO SEE
-         LDA   GFXPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
-         ADC   #$00           ; INCREMENT GFXPTR
-         STA   GFXPTR+1
-         
-RSTGFXP3 ;LDY   #$00
+         INC   GFXPTR
+RSTGFXP3 LDY   #$00
          STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
-         ;STA   RAMPAGE
-         LDY   #$00         ;KLUGE
-         LDA   #$FF
-         STA   (GFXPTR),Y
          LDY   #$06
          JMP   PIXPOKEY
-
 
 DECBMP   SEC
          LDA   BMPPTR

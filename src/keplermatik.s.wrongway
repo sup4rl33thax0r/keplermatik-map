@@ -80,50 +80,22 @@ CLOSE    LDA   #1
          DFB   READCMD
          DW    PARAMS
          RTS
-
-***************************
-*                   Write *
-*                   ----- *
-* 80STORE    off    $C000 *
-*            on     $C001 *
-* RAMRD      off    $C002 *
-*            on     $C003 *   
-* RAMWRT     off    $C004 *    
-*            on     $C005 *
-* PAGE2      off    $C054 *
-*            on     $C055 *
-* HIRES      off    $C056 *
-*            on     $C057 *
 *
-* For AUX:
-* 80STORE ON: $C001
-* PAGE2   ON: $C055
-* HIRES   ON: $C057
-* RAMRD  OFF: $C002
-* RAMWRT OFF: $C004
-*
-* For MAIN:
-* 80STORE ON: $C001
-* PAGE2  OFF: $C054
-* HIRES   ON: $C057
-* RAMRD  OFF: $C002
-* RAMWRT OFF: $C004
-***************************
-LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
+LDGFX    JSR   DISPGFX
+         LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          STA   GFXPTR
          LDA   #>GFXBASE
          STA   GFXPTR+1
          LDA   #$C0
          STA   RAMPAGE+1
-         LDA   #$55
+         LDA   #$05
          STA   RAMPAGE
-         STA   $C001      ;80STORE ON
+         STA   $C000      ;80STORE OFF
          STA   $C002      ;RAMRD OFF
-         STA   $C004      ;RAMWRT OFF
-         STA   $C055      ;PAGE2 ON
-         STA   $C057      ;HIRES ON
+         STA   $C005      ;RAMWRT ON
          LDX   #$00       ;SET UP INCREMENTS TO 0
          LDY   #$0A       ;GET BITMAP OFFSET FROM FILE POSITION $000A
+         
 
          LDA   FILEBASE,Y ;CALCULATE START OF BMP AND STORE IN BMPSTART
          STA   SCRATCH1
@@ -141,30 +113,26 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          STA   BMPSTART+1
         
          CLC
-         LDA   #$20             ; INITIALIZE BMPPTR
+         LDA   #$3A             ; INITIALIZE BMPPTR
          ;LDA   #$00
          ADC   BMPSTART 
-         LDA   #$AE        ; 16-BIT ADD $343A TO BMPSTART TO GET
+         LDA   #$78        ; 16-BIT ADD $343A TO BMPSTART TO GET
          STA   BMPPTR           ; START OF LINE 1 AND STORE IN BMPPTR
-         LDA   #$35             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
+         LDA   #$34             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
          ;LDA   #$00
          ADC   BMPSTART+1       ; TO FRAME BUFFER =)
-         LDA   #$75
+         LDA   #$74
          STA   BMPPTR+1
 
          LDY   #$06           ; FRAMEBUFFER USES 7 BITS PER BYTE
          LDX   #$07           ; BMP FORMAT USES 8 BITS PER BYTE
          CLC
 BEGINROW LDA   GFXPTR         ; CALCULATE EOR + 1
-         ADC   #$27           ; HARDCODED FOR DOUBLE HIRES
+         ADC   #$39           ; HARDCODED FOR DOUBLE HIRES
          STA   GFXEOR         ; WE CHECK FOR THIS LATER TO SEE
          LDA   GFXPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
          ADC   #$00           ; INCREMENT GFXPTR
          STA   GFXEOR+1
-         LDA   #$00
-         STA   GFXPTR
-
-         
 
 PIXPOKEY STY   YTEMP          ; TEMP STORE Y
          LDY   #$00
@@ -188,31 +156,33 @@ RSTGFXP  ;LDA   (GFXPTR),Y
          ;ROL
          ;STA   (GFXPTR),Y
          LDA   RAMPAGE
-         CMP   #$54
+         CMP   #$05
          BEQ   RSTGFXP2
-         LDA   #$54
+         LDA   #$05
          STA   RAMPAGE
          JMP   RSTGFXP3
-RSTGFXP2 LDA   #$55
+RSTGFXP2 LDA   #$04
          STA   RAMPAGE
-         ;INC   GFXPTR
          CLC
-         LDA   GFXPTR         ; CALCULATE EOR + 1
-         ADC   #$01           ; HARDCODED FOR DOUBLE HIRES
-         STA   GFXPTR         ; WE CHECK FOR THIS LATER TO SEE
-         LDA   GFXPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
-         ADC   #$00           ; INCREMENT GFXPTR
+         LDA   GFXPTR
+         ADC   #$01
+         STA   GFXPTR
+         LDA   GFXPTR+1
+         ADC   #$00
          STA   GFXPTR+1
-         
-RSTGFXP3 ;LDY   #$00
+
+BRKATMEM LDA   GFXPTR
+         CMP   #$88
+         BNE   RSTGFXP3
+         LDA   GFXPTR+1
+         CMP   #$3C
+         BNE   RSTGFXP3
+         CLC
+
+RSTGFXP3 LDY   #$00
          STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
-         ;STA   RAMPAGE
-         LDY   #$00         ;KLUGE
-         LDA   #$FF
-         STA   (GFXPTR),Y
          LDY   #$06
          JMP   PIXPOKEY
-
 
 DECBMP   SEC
          LDA   BMPPTR
@@ -240,7 +210,7 @@ RSTBMPP  JSR   INCBMPP
 RSTEORP  JSR   INCBMPP 
          CLC
          LDA   GFXPTR
-         ADC   #$27
+         ADC   #$39
          STA   GFXEOR
          LDA   GFXPTR+1
          ADC   #$00
@@ -254,29 +224,32 @@ EORCHK   LDA   GFXPTR
          CMP   GFXEOR+1
          BNE   RSTBMPP    ; IF NOT AT END OF ROW, GO RESET BMPPTR
 
+
                             ; SO YOU SAY WE'RE AT THE END OF ROW
          LDA   GFXPTR+1     ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL *
+         CMP   #$40
+         BEQ   DISPGFX
          CMP   #$3F       ; SORT OF CONDITIONS TO CHECK OUT
          BNE   CHKBOXP
          LDA   GFXPTR   ; CHECK LOW BYTE
-         CMP   #$A7       ; FIRST GAP IN FRAMEBUFFER MAP
+         CMP   #$B9       ; FIRST GAP IN FRAMEBUFFER MAP
          BEQ   GP3FA7
-         CMP   #$CF       ; SECOND GAP IN FRAMEBUFFER MAP
+         CMP   #$E1       ; SECOND GAP IN FRAMEBUFFER MAP
          BEQ   GP3FCF
          CMP   #$F7       ; END OF FILE
          BEQ   DISPGFX
 
 CHKBOXP  LDA   GFXPTR
          AND   #$3F       ; APPLY MASK FOR B00111111
-         CMP   #$27       ; MASKED VALUE = B00100111?
+         CMP   #$39       ; MASKED VALUE = B00100111?
          BEQ   CHKBOXP2
          LDA   GFXPTR
          AND   #$7F
-         CMP   #$4F
+         CMP   #$61
          BEQ   CHKBOXP2
          LDA   GFXPTR
-         AND   #$7F
-         CMP   #$77
+         AND   #$0F
+         CMP   #$09
          BNE   INCBOXP    ; IF NOT, GO TO THE NEXT OFFSET IN THE BOX
          
 CHKBOXP2 LDA   GFXPTR+1
@@ -286,18 +259,18 @@ CHKBOXP2 LDA   GFXPTR+1
 
 INCBOXP  CLC              ; INCREMENT GFXPTR BY THE BOX LINE OFFSET
          LDA   GFXPTR     ; BOX LINE OFFSETS ARE $0400 APART BUT ONLY
-         ADC   #$D9       ; $03D9 FROM THE END OF ONE LINE TO THE
+         ADC   #$C7       ; $03C7 FROM THE END OF ONE LINE TO THE
          STA   GFXPTR     ; BEGINNING OF THE NEXT
-         LDA   GFXPTR+1
+         LDA   GFXPTR+1   ; THIS GOES BETWEEN LINES
          ADC   #$03
          STA   GFXPTR+1
          JMP   DECBMP
 
 RESBOXP  SEC              ; RESET BOX LINE OFFSET BY JUMPING TO THE
          LDA   GFXPTR     ; NEXT FRAMEBUFFER OFFSET WHERE BOX LINE
-         SBC   #$A7       ; OFFSET IS ZERO
+         SBC   #$B9       ; OFFSET IS ZERO
          STA   GFXPTR
-         LDA   GFXPTR+1
+         LDA   GFXPTR+1   ; THIS RESETS BETWEEN RED BANDS ON SPREADSHEET
          SBC   #$1B
          STA   GFXPTR+1
          JMP   DECBMP
