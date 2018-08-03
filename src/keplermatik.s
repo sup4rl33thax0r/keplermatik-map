@@ -30,26 +30,24 @@ GFXPTR   EQU   $EB
 GFXEOR   EQU   $ED
 YTEMP    EQU   $EF
 RAMPAGE  EQU   $06
+GFXTICK  EQU   $07
+BMPTICK  EQU   $08
 *
+****************************************
+* 
 MAIN     JSR   REMOVE
          JSR   OPEN
-         BNE   ERROR
+
          JSR   READ
-* BNE ERROR
-* JSR CLOSE
+         JSR   CLOSE
          JSR   LDGFX
          RTS
-*
-ERROR    JSR   PRBYTE
-         JSR   BELL
-         JSR   CROUT
-         RTS
-*
+
 OPEN     JSR   MLI
          DFB   OPENCMD
          DW    PARAMS
          RTS
-*
+
 READ     LDA   PARAMS+5
          STA   PARAMS+1
          LDA   #4
@@ -81,6 +79,64 @@ CLOSE    LDA   #1
          DW    PARAMS
          RTS
 
+****************************************
+* GRAPHICS ROUTINES                    *
+* ------------------------------------ *
+* These routines take the BMP data     *
+* loaded at $4000 on the main page and *
+* copy it to $2000 on the main and aux *
+* pages in the very specific way       *
+* required by DHGR.                    *
+*                                      *
+* In general, the first LDGFX sets up  *
+* the required soft switches and       *
+* initializes the pointers to both BMP *
+* (BMPSTART) and video RAM (GFXPTR).   *
+* It also initializes the end-of-row   *
+* pointer (GFXEOR).                    *
+*                                      *
+* The code then begins performing what *
+* we affectionately call "the pixel    *
+* pokey" where we bang bits off the    *
+* end of the bitmap byte pointed to by *
+* BMPPTR into the carry flag, using    *
+* this flag as temporary storage for   *
+* the pixel before banging it into the *
+* byte in video RAM that's pointed to  *
+* by GFXPTR.  This also has the handy  *
+* effect of reversing the order of the *
+* bits which is required by the way    *
+* that video RAM is structured.        *
+*                                      *
+* While the pixel pokey is going on,   *
+* we keep track of two counters with   *
+* the X and Y registers.  The X counts *
+* down from 7 to 0 and tracks bits of  *
+* the current BMP byte.  The Y counts  *
+* down from 6 to 0 and tracks the 7    *
+* bits of the video RAM byte.  When    *
+* these counters each hit zero, which  *
+* implies we finished a byte, other    *
+* stuff happens.                       *
+*
+* When the BMP counter (X) hits zero,  *
+* we check to see if we're at the end  *
+* of the BMP row.  If not, we just     *
+* increment the BMP pointer, reset X   *
+* and get back to the pixel pokey.     *
+* If we are at the end of the row,     *
+* things get interesting.              *
+*
+* Essentially, there is non-intuitive  *
+* but regular structure to the DHGR    *
+* memory map.  First, rows are set up  *
+* in 8 row blocks where the rows are   *
+* $0400 away from one another.  In our *
+* implementation, this puts row 0 at   *
+* $2000, row 1 at $2400, and so on     *
+* 
+* These
+
 ***************************
 *                   Write *
 *                   ----- *
@@ -94,20 +150,20 @@ CLOSE    LDA   #1
 *            on     $C055 *
 * HIRES      off    $C056 *
 *            on     $C057 *
-*
-* For AUX:
-* 80STORE ON: $C001
-* PAGE2   ON: $C055
-* HIRES   ON: $C057
-* RAMRD  OFF: $C002
-* RAMWRT OFF: $C004
-*
-* For MAIN:
-* 80STORE ON: $C001
-* PAGE2  OFF: $C054
-* HIRES   ON: $C057
-* RAMRD  OFF: $C002
-* RAMWRT OFF: $C004
+***************************
+* For AUX:                *
+* 80STORE ON: $C001       *
+* PAGE2   ON: $C055       *
+* HIRES   ON: $C057       *
+* RAMRD  OFF: $C002       *
+* RAMWRT OFF: $C004       *
+*                         *
+* For MAIN:               *
+* 80STORE ON: $C001       *
+* PAGE2  OFF: $C054       *
+* HIRES   ON: $C057       *
+* RAMRD  OFF: $C002       *
+* RAMWRT OFF: $C004       *
 ***************************
 LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          STA   GFXPTR
@@ -140,20 +196,20 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          LDA   #$40
          STA   BMPSTART+1
         
-         CLC
-         LDA   #$20             ; INITIALIZE BMPPTR
+         ;CLC
+        ; LDA   #$20             ; INITIALIZE BMPPTR
          ;LDA   #$00
-         ADC   BMPSTART 
-         LDA   #$AE        ; 16-BIT ADD $343A TO BMPSTART TO GET
+         ;ADC   BMPSTART 
+         LDA   #$F6        ; 16-BIT ADD $343A TO BMPSTART TO GET
          STA   BMPPTR           ; START OF LINE 1 AND STORE IN BMPPTR
-         LDA   #$35             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
+         ;LDA   #$35             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
          ;LDA   #$00
-         ADC   BMPSTART+1       ; TO FRAME BUFFER =)
+         ;ADC   BMPSTART+1       ; TO FRAME BUFFER =)
          LDA   #$75
          STA   BMPPTR+1
 
-         LDY   #$06           ; FRAMEBUFFER USES 7 BITS PER BYTE
-         LDX   #$07           ; BMP FORMAT USES 8 BITS PER BYTE
+         LDY   #GFXTICK           ; FRAMEBUFFER USES 7 BITS PER BYTE
+         LDX   #BMPTICK           ; BMP FORMAT USES 8 BITS PER BYTE
          CLC
 BEGINROW LDA   GFXPTR         ; CALCULATE EOR + 1
          ADC   #$27           ; HARDCODED FOR DOUBLE HIRES
@@ -168,12 +224,12 @@ BEGINROW LDA   GFXPTR         ; CALCULATE EOR + 1
 
 PIXPOKEY STY   YTEMP          ; TEMP STORE Y
          LDY   #$00
+         CLC
          LDA   (BMPPTR),Y
          ROR   A              ; PUT YOUR RIGHT FOOT IN
          STA   (BMPPTR),Y
          LDY   #$00
          LDA   (GFXPTR),Y
-         ;CLC
          ROL   A              ; TAKE YOUR LEFT FOOT OUT
          STA   (GFXPTR),Y
          LDY   YTEMP
@@ -184,39 +240,28 @@ PIXPOKE2 DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
          BEQ   RSTGFXP        ; NEEDS TO BE RESET
          JMP   PIXPOKEY
 
-RSTGFXP  ;LDA   (GFXPTR),Y
-         ;ROL
-         ;STA   (GFXPTR),Y
-         LDA   RAMPAGE
+RSTGFXP  LDA   RAMPAGE
          CMP   #$54
          BEQ   RSTGFXP2
          LDA   #$54
          STA   RAMPAGE
          JMP   RSTGFXP3
+
 RSTGFXP2 LDA   #$55
          STA   RAMPAGE
-         ;INC   GFXPTR
-         CLC
-         LDA   GFXPTR         ; CALCULATE EOR + 1
-         ADC   #$01           ; HARDCODED FOR DOUBLE HIRES
-         STA   GFXPTR         ; WE CHECK FOR THIS LATER TO SEE
-         LDA   GFXPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
-         ADC   #$00           ; INCREMENT GFXPTR
-         STA   GFXPTR+1
+         INC   GFXPTR       
          
-RSTGFXP3 ;LDY   #$00
+RSTGFXP3 LDY   #$00
          STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
-         ;STA   RAMPAGE
-         LDY   #$00         ;KLUGE
-         LDA   #$FF
+         LDA   #$00          ;KLUGE
          STA   (GFXPTR),Y
-         LDY   #$06
+         LDY   #GFXTICK
          JMP   PIXPOKEY
 
 
 DECBMP   SEC
          LDA   BMPPTR
-         SBC   #$8B
+         SBC   #$8E
          STA   BMPPTR
          LDA   BMPPTR+1
          SBC   #$00
@@ -231,7 +276,7 @@ INCBMPP  CLC                ;INCREMENT BMP POINTER
          LDA   BMPPTR+1
          ADC   #$00
          STA   BMPPTR+1
-         LDX   #$07
+         LDX   #BMPTICK
          RTS
 
 RSTBMPP  JSR   INCBMPP
@@ -247,8 +292,8 @@ RSTEORP  JSR   INCBMPP
          STA   GFXEOR+1
          RTS
 
-EORCHK   LDA   GFXPTR 
-         CMP   GFXEOR
+EORCHK   LDA   GFXPTR     ; WE ARE HITTING ROW ONE BYTE EARLY
+         CMP   GFXEOR     ; CHANGE TO RUN OFF BMPPTR
          BNE   RSTBMPP    ; EARLY CHECK LSB FOR END OF ROW
          LDA   GFXPTR+1
          CMP   GFXEOR+1
@@ -314,23 +359,13 @@ GP3FCF   LDA   #$50       ; JUMP GFXPTR FROM $3FCF TO $2050
          STA   GFXPTR+1
          JMP   DECBMP
 
-GPFINISH SEC
-         LDA   BMPPTR
-         SBC   #$8B
-         STA   BMPPTR
-         LDA   BMPPTR+1
-         SBC   #$00
-         STA   BMPPTR+1
-         JSR   INCBMPP
-         JMP   PIXPOKEY
-
 DISPGFX  LDA   $C057
          LDA   $C050
          LDA   $C05E
          LDA   $C053
          STA   $C00D
          LDA   #$00
-         STA   $C000
+         STA   $C05E
          LDA   $C055
          RTS
 *
