@@ -16,6 +16,7 @@
 SCRATCH1 EQU   $08
 SCRATCH2 EQU   $09
 BELL     EQU   $FF3A
+PRCHR    EQU   $FDED
 CROUT    EQU   $FD8E
 PRBYTE   EQU   $FDDA
 MLI      EQU   $BF00
@@ -224,7 +225,8 @@ BEGINROW LDA   BMPPTR         ; CALCULATE EOR + 1
 
          
 
-PIXPOKEY STY   YTEMP          ; TEMP STORE Y
+PIXPOKEY JSR   PRSTATUS
+         STY   YTEMP          ; TEMP STORE Y
          LDY   #$00           ; RSTGFXP MAY BE RESETTING ON FIRST BYTE?
          CLC
          LDA   (BMPPTR),Y
@@ -235,7 +237,6 @@ PIXPOKEY STY   YTEMP          ; TEMP STORE Y
          ROL   A              ; TAKE YOUR LEFT FOOT OUT
          STA   (GFXPTR),Y
          LDY   YTEMP
-         JSR   PRSTATUS
          DEX                  ; DO THE PIXEL POKEY AND SHAKE
          BEQ   EORCHK         ; OUR CARRY BIT ALL ABOUT, THEN GO CHECK EOR IF X IS 0
 
@@ -253,7 +254,8 @@ RSTGFXP  LDA   RAMPAGE
 
 RSTGFXP2 LDA   #$55
          STA   RAMPAGE
-         INC   GFXPTR       
+         INC   GFXPTR   
+         ;ıBRK    
          CLC
 RSTGFXP3 LDY   #$00
          STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
@@ -373,29 +375,29 @@ DISPGFX  LDA   $C057
          LDA   $C055
          RTS
 
-PRSTATUS LDA   #$D8
-         JSR   $FDED
-         TXA
+PRSTATUS LDA   #$D8      ;'X'
+         JSR   PRCHR
+         TXA             ; PRINT BMP BIT COUNTER
          JSR   PRBYTE
-         LDA   #$A0
-         JSR   $FDED
-         LDA   #$D9
-         JSR   $FDED
-         TYA
+         LDA   #$A0      ;' '
+         JSR   PRCHR
+         LDA   #$D9      ;'Y'
+         JSR   PRCHR
+         TYA             ; PRINT GFX BIT COUNTER
          JSR   PRBYTE
-         LDA   #$A0
-         JSR   $FDED
-         LDA   #$C2 
-         JSR   $FDED
-         LDA   BMPPTR+1
+         LDA   #$A0      ;' '
+         JSR   PRCHR
+         LDA   #$C2      ;'B' 
+         JSR   PRCHR
+         LDA   BMPPTR+1  ;PRINT BMP POINTER ADDRESS
          JSR   PRBYTE
          LDA   BMPPTR
          JSR   PRBYTE
-         LDA   #$A0
-         JSR   $FDED
-         LDA   #$C7 
-         JSR   $FDED
-         LDA   GFXPTR+1
+         LDA   #$A0      ;' '
+         JSR   PRCHR
+         LDA   #$C7      ;'G'
+         JSR   PRCHR
+         LDA   GFXPTR+1  ;PRINT GFX POINTER ADDRESS
          JSR   PRBYTE
          LDA   GFXPTR
          JSR   PRBYTE
