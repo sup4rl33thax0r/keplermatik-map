@@ -27,11 +27,13 @@ FILEBASE EQU   $4000
 BMPSTART EQU   $FA
 BMPPTR   EQU   $FC
 GFXPTR   EQU   $EB
-GFXEOR   EQU   $ED
+BMPEOR   EQU   $ED
 YTEMP    EQU   $EF
 RAMPAGE  EQU   $06
 GFXTICK  EQU   $07
 BMPTICK  EQU   $08
+GFXROWL  EQU   $27
+BMPROWL  EQU   $44
 *
 ****************************************
 * 
@@ -93,7 +95,7 @@ CLOSE    LDA   #1
 * initializes the pointers to both BMP *
 * (BMPSTART) and video RAM (GFXPTR).   *
 * It also initializes the end-of-row   *
-* pointer (GFXEOR).                    *
+* pointer (BMPEOR).                    *
 *                                      *
 * The code then begins performing what *
 * we affectionately call "the pixel    *
@@ -211,19 +213,19 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          LDY   #GFXTICK           ; FRAMEBUFFER USES 7 BITS PER BYTE
          LDX   #BMPTICK           ; BMP FORMAT USES 8 BITS PER BYTE
          CLC
-BEGINROW LDA   GFXPTR         ; CALCULATE EOR + 1
-         ADC   #$27           ; HARDCODED FOR DOUBLE HIRES
-         STA   GFXEOR         ; WE CHECK FOR THIS LATER TO SEE
-         LDA   GFXPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
+BEGINROW LDA   BMPPTR         ; CALCULATE EOR + 1
+         ADC   #BMPROWL           ; HARDCODED FOR DOUBLE HIRES
+         STA   BMPEOR         ; WE CHECK FOR THIS LATER TO SEE
+         LDA   BMPPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
          ADC   #$00           ; INCREMENT GFXPTR
-         STA   GFXEOR+1
+         STA   BMPEOR+1
          LDA   #$00
          STA   GFXPTR
 
          
 
 PIXPOKEY STY   YTEMP          ; TEMP STORE Y
-         LDY   #$00
+         LDY   #$00           ; RSTGFXP MAY BE RESETTING ON FIRST BYTE?
          CLC
          LDA   (BMPPTR),Y
          ROR   A              ; PUT YOUR RIGHT FOOT IN
@@ -233,10 +235,12 @@ PIXPOKEY STY   YTEMP          ; TEMP STORE Y
          ROL   A              ; TAKE YOUR LEFT FOOT OUT
          STA   (GFXPTR),Y
          LDY   YTEMP
+         JSR   PRSTATUS
          DEX                  ; DO THE PIXEL POKEY AND SHAKE
          BEQ   EORCHK         ; OUR CARRY BIT ALL ABOUT, THEN GO CHECK EOR IF X IS 0
 
-PIXPOKE2 DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
+PIXPOKE2 
+         DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
          BEQ   RSTGFXP        ; NEEDS TO BE RESET
          JMP   PIXPOKEY
 
@@ -250,7 +254,7 @@ RSTGFXP  LDA   RAMPAGE
 RSTGFXP2 LDA   #$55
          STA   RAMPAGE
          INC   GFXPTR       
-         
+         CLC
 RSTGFXP3 LDY   #$00
          STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
          LDA   #$00          ;KLUGE
@@ -282,21 +286,21 @@ INCBMPP  CLC                ;INCREMENT BMP POINTER
 RSTBMPP  JSR   INCBMPP
          JMP   PIXPOKE2
 
-RSTEORP  JSR   INCBMPP 
+RSTEORP  ;JSR   INCBMPP 
          CLC
-         LDA   GFXPTR
-         ADC   #$27
-         STA   GFXEOR
-         LDA   GFXPTR+1
+         LDA   BMPPTR
+         ADC   #BMPROWL
+         STA   BMPEOR
+         LDA   BMPPTR+1
          ADC   #$00
-         STA   GFXEOR+1
+         STA   BMPEOR+1
          RTS
 
-EORCHK   LDA   GFXPTR     ; WE ARE HITTING ROW ONE BYTE EARLY
-         CMP   GFXEOR     ; CHANGE TO RUN OFF BMPPTR
+EORCHK   LDA   BMPPTR     ; WE ARE HITTING ROW ONE BYTE EARLY
+         CMP   BMPEOR     ; CHANGE TO RUN OFF BMPPTR
          BNE   RSTBMPP    ; EARLY CHECK LSB FOR END OF ROW
-         LDA   GFXPTR+1
-         CMP   GFXEOR+1
+         LDA   BMPPTR+1
+         CMP   BMPEOR+1
          BNE   RSTBMPP    ; IF NOT AT END OF ROW, GO RESET BMPPTR
 
                             ; SO YOU SAY WE'RE AT THE END OF ROW
@@ -368,6 +372,36 @@ DISPGFX  LDA   $C057
          STA   $C05E
          LDA   $C055
          RTS
+
+PRSTATUS LDA   #$D8
+         JSR   $FDED
+         TXA
+         JSR   PRBYTE
+         LDA   #$A0
+         JSR   $FDED
+         LDA   #$D9
+         JSR   $FDED
+         TYA
+         JSR   PRBYTE
+         LDA   #$A0
+         JSR   $FDED
+         LDA   #$C2 
+         JSR   $FDED
+         LDA   BMPPTR+1
+         JSR   PRBYTE
+         LDA   BMPPTR
+         JSR   PRBYTE
+         LDA   #$A0
+         JSR   $FDED
+         LDA   #$C7 
+         JSR   $FDED
+         LDA   GFXPTR+1
+         JSR   PRBYTE
+         LDA   GFXPTR
+         JSR   PRBYTE
+         JSR   CROUT
+         RTS
+
 *
 ********************************
 * DISABLE /RAM VOLUME TO FREE  *
