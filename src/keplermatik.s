@@ -225,8 +225,8 @@ BEGINROW LDA   BMPPTR         ; CALCULATE EOR + 1
 
          
 
-PIXPOKEY JSR   PRSTATUS
-         STY   YTEMP          ; TEMP STORE Y
+PIXPOKEY STY   YTEMP          ; TEMP STORE Y
+         JSR   PRSTATUS   
          LDY   #$00           ; RSTGFXP MAY BE RESETTING ON FIRST BYTE?
          CLC
          LDA   (BMPPTR),Y
@@ -254,8 +254,7 @@ RSTGFXP  LDA   RAMPAGE
 
 RSTGFXP2 LDA   #$55
          STA   RAMPAGE
-         INC   GFXPTR   
-         ;ıBRK    
+         INC   GFXPTR       
          CLC
 RSTGFXP3 LDY   #$00
          STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
@@ -375,7 +374,8 @@ DISPGFX  LDA   $C057
          LDA   $C055
          RTS
 
-PRSTATUS LDA   #$D8      ;'X'
+PRSTATUS STA   $C054
+         LDA   #$D8      ;'X'
          JSR   PRCHR
          TXA             ; PRINT BMP BIT COUNTER
          JSR   PRBYTE
@@ -402,6 +402,12 @@ PRSTATUS LDA   #$D8      ;'X'
          LDA   GFXPTR
          JSR   PRBYTE
          JSR   CROUT
+         LDY   #$00
+         STA   (RAMPAGE),Y
+         RTS
+
+PRMEMFI2 LDY   #$00
+         STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
          RTS
 
 *

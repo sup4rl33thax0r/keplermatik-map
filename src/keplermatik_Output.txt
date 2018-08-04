@@ -41,7 +41,7 @@
    38 |  1 keplermatik.s     38 | Comment     | 11 |         |    0 | 00/8000               | *
    39 |  1 keplermatik.s     39 | Comment     | 11 |         |    0 | 00/8000               | ****************************************
    40 |  1 keplermatik.s     40 | Comment     | 11 |         |    0 | 00/8000               | * 
-   41 |  1 keplermatik.s     41 | Code        | 11 |         |    3 | 00/8000 : 20 F9 81    | MAIN        JSR   REMOVE         
+   41 |  1 keplermatik.s     41 | Code        | 11 |         |    3 | 00/8000 : 20 05 82    | MAIN        JSR   REMOVE         
    42 |  1 keplermatik.s     42 | Code        | 11 |         |    3 | 00/8003 : 20 10 80    |             JSR   OPEN           
    43 |  1 keplermatik.s     43 | Empty       | 11 |         |    0 | 00/8006               |                                  
    44 |  1 keplermatik.s     44 | Code        | 11 |         |    3 | 00/8006 : 20 17 80    |             JSR   READ           
@@ -51,38 +51,38 @@
    48 |  1 keplermatik.s     48 | Empty       | 11 |         |    0 | 00/8010               |                                  
    49 |  1 keplermatik.s     49 | Code        | 11 |         |    3 | 00/8010 : 20 00 BF    | OPEN        JSR   {$BF00}        
    50 |  1 keplermatik.s     50 | Data        | 11 |         |    1 | 00/8013 : C8          |             DFB   {$C8}          
-   51 |  1 keplermatik.s     51 | Data        | 11 |         |    2 | 00/8014 : 59 82       |             DW    PARAMS         
+   51 |  1 keplermatik.s     51 | Data        | 11 |         |    2 | 00/8014 : 65 82       |             DW    PARAMS         
    52 |  1 keplermatik.s     52 | Code        | 11 |         |    1 | 00/8016 : 60          |             RTS                  
    53 |  1 keplermatik.s     53 | Empty       | 11 |         |    0 | 00/8017               |                                  
-   54 |  1 keplermatik.s     54 | Code        | 11 |         |    3 | 00/8017 : AD 5E 82    | READ        LDA   PARAMS+5       
-   55 |  1 keplermatik.s     55 | Code        | 11 |         |    3 | 00/801A : 8D 5A 82    |             STA   PARAMS+1       
+   54 |  1 keplermatik.s     54 | Code        | 11 |         |    3 | 00/8017 : AD 6A 82    | READ        LDA   PARAMS+5       
+   55 |  1 keplermatik.s     55 | Code        | 11 |         |    3 | 00/801A : 8D 66 82    |             STA   PARAMS+1       
    56 |  1 keplermatik.s     56 | Code        | 11 |         |    2 | 00/801D : A9 04       |             LDA   #4             
-   57 |  1 keplermatik.s     57 | Code        | 11 |         |    3 | 00/801F : 8D 59 82    |             STA   PARAMS         
+   57 |  1 keplermatik.s     57 | Code        | 11 |         |    3 | 00/801F : 8D 65 82    |             STA   PARAMS         
    58 |  1 keplermatik.s     58 | Code        | 11 |         |    2 | 00/8022 : A9 00       |             LDA   #<{$4000}      
-   59 |  1 keplermatik.s     59 | Code        | 11 |         |    3 | 00/8024 : 8D 5B 82    |             STA   PARAMS+2       
+   59 |  1 keplermatik.s     59 | Code        | 11 |         |    3 | 00/8024 : 8D 67 82    |             STA   PARAMS+2       
    60 |  1 keplermatik.s     60 | Code        | 11 |         |    2 | 00/8027 : A9 40       |             LDA   #>{$4000}      
-   61 |  1 keplermatik.s     61 | Code        | 11 |         |    3 | 00/8029 : 8D 5C 82    |             STA   PARAMS+3       
+   61 |  1 keplermatik.s     61 | Code        | 11 |         |    3 | 00/8029 : 8D 68 82    |             STA   PARAMS+3       
    62 |  1 keplermatik.s     62 | Code        | 11 |         |    2 | 00/802C : A9 00       |             LDA   #00            
-   63 |  1 keplermatik.s     63 | Code        | 11 |         |    3 | 00/802E : 8D 5D 82    |             STA   PARAMS+4       
+   63 |  1 keplermatik.s     63 | Code        | 11 |         |    3 | 00/802E : 8D 69 82    |             STA   PARAMS+4       
    64 |  1 keplermatik.s     64 | Code        | 11 |         |    2 | 00/8031 : A9 40       |             LDA   #$40           
-   65 |  1 keplermatik.s     65 | Code        | 11 |         |    3 | 00/8033 : 8D 5E 82    |             STA   PARAMS+5       
+   65 |  1 keplermatik.s     65 | Code        | 11 |         |    3 | 00/8033 : 8D 6A 82    |             STA   PARAMS+5       
    66 |  1 keplermatik.s     66 | Code        | 11 |         |    2 | 00/8036 : A9 AA       |             LDA   #$AA           
-   67 |  1 keplermatik.s     67 | Code        | 11 |         |    3 | 00/8038 : 8D 5F 82    |             STA   PARAMS+6       
+   67 |  1 keplermatik.s     67 | Code        | 11 |         |    3 | 00/8038 : 8D 6B 82    |             STA   PARAMS+6       
    68 |  1 keplermatik.s     68 | Code        | 11 |         |    2 | 00/803B : A9 AA       |             LDA   #$AA           
-   69 |  1 keplermatik.s     69 | Code        | 11 |         |    3 | 00/803D : 8D 60 82    |             STA   PARAMS+7       
+   69 |  1 keplermatik.s     69 | Code        | 11 |         |    3 | 00/803D : 8D 6C 82    |             STA   PARAMS+7       
    70 |  1 keplermatik.s     70 | Code        | 11 |         |    3 | 00/8040 : 20 00 BF    |             JSR   {$BF00}        
    71 |  1 keplermatik.s     71 | Data        | 11 |         |    1 | 00/8043 : CA          |             DFB   {$CA}          
-   72 |  1 keplermatik.s     72 | Data        | 11 |         |    2 | 00/8044 : 59 82       |             DW    PARAMS         
-   73 |  1 keplermatik.s     73 | Code        | 11 |         |    3 | 00/8046 : AD 5F 82    |             LDA   PARAMS+6       
+   72 |  1 keplermatik.s     72 | Data        | 11 |         |    2 | 00/8044 : 65 82       |             DW    PARAMS         
+   73 |  1 keplermatik.s     73 | Code        | 11 |         |    3 | 00/8046 : AD 6B 82    |             LDA   PARAMS+6       
    74 |  1 keplermatik.s     74 | Code        | 11 |         |    2 | 00/8049 : 85 08       |             STA   {$08}          
-   75 |  1 keplermatik.s     75 | Code        | 11 |         |    3 | 00/804B : AD 60 82    |             LDA   PARAMS+7       
+   75 |  1 keplermatik.s     75 | Code        | 11 |         |    3 | 00/804B : AD 6C 82    |             LDA   PARAMS+7       
    76 |  1 keplermatik.s     76 | Code        | 11 |         |    2 | 00/804E : 85 09       |             STA   {$09}          
    77 |  1 keplermatik.s     77 | Code        | 11 |         |    1 | 00/8050 : 60          |             RTS                  
    78 |  1 keplermatik.s     78 | Code        | 11 |         |    2 | 00/8051 : A9 01       | CLOSE       LDA   #1             
-   79 |  1 keplermatik.s     79 | Code        | 11 |         |    3 | 00/8053 : 8D 59 82    |             STA   PARAMS         
+   79 |  1 keplermatik.s     79 | Code        | 11 |         |    3 | 00/8053 : 8D 65 82    |             STA   PARAMS         
    80 |  1 keplermatik.s     80 | Code        | 11 |         |    3 | 00/8056 : 20 00 BF    |             JSR   {$BF00}        
    81 |  1 keplermatik.s     81 | Data        | 11 |         |    1 | 00/8059 : CA          |             DFB   {$CA}          
-   82 |  1 keplermatik.s     82 | Data        | 11 |         |    2 | 00/805A : 59 82       |             DW    PARAMS         
+   82 |  1 keplermatik.s     82 | Data        | 11 |         |    2 | 00/805A : 65 82       |             DW    PARAMS         
    83 |  1 keplermatik.s     83 | Code        | 11 |         |    1 | 00/805C : 60          |             RTS                  
    84 |  1 keplermatik.s     84 | Empty       | 11 |         |    0 | 00/805D               |                                  
    85 |  1 keplermatik.s     85 | Comment     | 11 |         |    0 | 00/805D               | ****************************************
@@ -228,8 +228,8 @@
   225 |  1 keplermatik.s    225 | Empty       | 11 |         |    0 | 00/80B1               |                                  
   226 |  1 keplermatik.s    226 | Empty       | 11 |         |    0 | 00/80B1               |                                  
   227 |  1 keplermatik.s    227 | Empty       | 11 |         |    0 | 00/80B1               |                                  
-  228 |  1 keplermatik.s    228 | Code        | 11 |         |    3 | 00/80B1 : 20 B6 81    | PIXPOKEY    JSR   PRSTATUS       
-  229 |  1 keplermatik.s    229 | Code        | 11 |         |    2 | 00/80B4 : 84 EF       |             STY   {$EF}          ; TEMP STORE Y
+  228 |  1 keplermatik.s    228 | Code        | 11 |         |    2 | 00/80B1 : 84 EF       | PIXPOKEY    STY   {$EF}          ; TEMP STORE Y
+  229 |  1 keplermatik.s    229 | Code        | 11 |         |    3 | 00/80B3 : 20 B6 81    |             JSR   PRSTATUS       
   230 |  1 keplermatik.s    230 | Code        | 11 |         |    2 | 00/80B6 : A0 00       |             LDY   #$00           ; RSTGFXP MAY BE RESETTING ON FIRST BYTE?
   231 |  1 keplermatik.s    231 | Code        | 11 |         |    1 | 00/80B8 : 18          |             CLC                  
   232 |  1 keplermatik.s    232 | Code        | 11 |         |    2 | 00/80B9 : B1 FC       |             LDA   ({$FC}),Y      
@@ -258,219 +258,225 @@
   255 |  1 keplermatik.s    255 | Code        | 11 |         |    2 | 00/80DD : A9 55       | RSTGFXP2    LDA   #$55           
   256 |  1 keplermatik.s    256 | Code        | 11 |         |    2 | 00/80DF : 85 06       |             STA   {$06}          
   257 |  1 keplermatik.s    257 | Code        | 11 |         |    2 | 00/80E1 : E6 EB       |             INC   {$EB}          
-  258 |  1 keplermatik.s    258 | Comment     | 11 |         |    0 | 00/80E3               |          ;ıBRK    
-  259 |  1 keplermatik.s    259 | Code        | 11 |         |    1 | 00/80E3 : 18          |             CLC                  
-  260 |  1 keplermatik.s    260 | Code        | 11 |         |    2 | 00/80E4 : A0 00       | RSTGFXP3    LDY   #$00           
-  261 |  1 keplermatik.s    261 | Code        | 11 |         |    2 | 00/80E6 : 91 06       |             STA   ({$06}),Y      ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
-  262 |  1 keplermatik.s    262 | Code        | 11 |         |    2 | 00/80E8 : A9 00       |             LDA   #$00           ;KLUGE
-  263 |  1 keplermatik.s    263 | Code        | 11 |         |    2 | 00/80EA : 91 EB       |             STA   ({$EB}),Y      
-  264 |  1 keplermatik.s    264 | Code        | 11 |         |    2 | 00/80EC : A0 07       |             LDY   #{$07}         
-  265 |  1 keplermatik.s    265 | Code        | 11 |         |    3 | 00/80EE : 4C B1 80    |             JMP   PIXPOKEY       
+  258 |  1 keplermatik.s    258 | Code        | 11 |         |    1 | 00/80E3 : 18          |             CLC                  
+  259 |  1 keplermatik.s    259 | Code        | 11 |         |    2 | 00/80E4 : A0 00       | RSTGFXP3    LDY   #$00           
+  260 |  1 keplermatik.s    260 | Code        | 11 |         |    2 | 00/80E6 : 91 06       |             STA   ({$06}),Y      ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
+  261 |  1 keplermatik.s    261 | Code        | 11 |         |    2 | 00/80E8 : A9 00       |             LDA   #$00           ;KLUGE
+  262 |  1 keplermatik.s    262 | Code        | 11 |         |    2 | 00/80EA : 91 EB       |             STA   ({$EB}),Y      
+  263 |  1 keplermatik.s    263 | Code        | 11 |         |    2 | 00/80EC : A0 07       |             LDY   #{$07}         
+  264 |  1 keplermatik.s    264 | Code        | 11 |         |    3 | 00/80EE : 4C B1 80    |             JMP   PIXPOKEY       
+  265 |  1 keplermatik.s    265 | Empty       | 11 |         |    0 | 00/80F1               |                                  
   266 |  1 keplermatik.s    266 | Empty       | 11 |         |    0 | 00/80F1               |                                  
-  267 |  1 keplermatik.s    267 | Empty       | 11 |         |    0 | 00/80F1               |                                  
-  268 |  1 keplermatik.s    268 | Code        | 11 |         |    1 | 00/80F1 : 38          | DECBMP      SEC                  
-  269 |  1 keplermatik.s    269 | Code        | 11 |         |    2 | 00/80F2 : A5 FC       |             LDA   {$FC}          
-  270 |  1 keplermatik.s    270 | Code        | 11 |         |    2 | 00/80F4 : E9 8E       |             SBC   #$8E           
-  271 |  1 keplermatik.s    271 | Code        | 11 |         |    2 | 00/80F6 : 85 FC       |             STA   {$FC}          
-  272 |  1 keplermatik.s    272 | Code        | 11 |         |    2 | 00/80F8 : A5 FD       |             LDA   {$FC}+1        
-  273 |  1 keplermatik.s    273 | Code        | 11 |         |    2 | 00/80FA : E9 00       |             SBC   #$00           
-  274 |  1 keplermatik.s    274 | Code        | 11 |         |    2 | 00/80FC : 85 FD       |             STA   {$FC}+1        
-  275 |  1 keplermatik.s    275 | Code        | 11 |         |    3 | 00/80FE : 20 1A 81    |             JSR   RSTEORP        
-  276 |  1 keplermatik.s    276 | Code        | 11 |         |    3 | 00/8101 : 4C B1 80    |             JMP   PIXPOKEY       
-  277 |  1 keplermatik.s    277 | Empty       | 11 |         |    0 | 00/8104               |                                  
-  278 |  1 keplermatik.s    278 | Code        | 11 |         |    1 | 00/8104 : 18          | INCBMPP     CLC                  ;INCREMENT BMP POINTER
-  279 |  1 keplermatik.s    279 | Code        | 11 |         |    2 | 00/8105 : A5 FC       |             LDA   {$FC}          
-  280 |  1 keplermatik.s    280 | Code        | 11 |         |    2 | 00/8107 : 69 01       |             ADC   #$01           
-  281 |  1 keplermatik.s    281 | Code        | 11 |         |    2 | 00/8109 : 85 FC       |             STA   {$FC}          
-  282 |  1 keplermatik.s    282 | Code        | 11 |         |    2 | 00/810B : A5 FD       |             LDA   {$FC}+1        
-  283 |  1 keplermatik.s    283 | Code        | 11 |         |    2 | 00/810D : 69 00       |             ADC   #$00           
-  284 |  1 keplermatik.s    284 | Code        | 11 |         |    2 | 00/810F : 85 FD       |             STA   {$FC}+1        
-  285 |  1 keplermatik.s    285 | Code        | 11 |         |    2 | 00/8111 : A2 08       |             LDX   #{$08}         
-  286 |  1 keplermatik.s    286 | Code        | 11 |         |    1 | 00/8113 : 60          |             RTS                  
-  287 |  1 keplermatik.s    287 | Empty       | 11 |         |    0 | 00/8114               |                                  
-  288 |  1 keplermatik.s    288 | Code        | 11 |         |    3 | 00/8114 : 20 04 81    | RSTBMPP     JSR   INCBMPP        
-  289 |  1 keplermatik.s    289 | Code        | 11 |         |    3 | 00/8117 : 4C CA 80    |             JMP   PIXPOKE2       
-  290 |  1 keplermatik.s    290 | Empty       | 11 |         |    0 | 00/811A               |                                  
-  291 |  1 keplermatik.s    291 | Empty       | 11 |         |    0 | 00/811A               | RSTEORP                          ;JSR   INCBMPP
-  292 |  1 keplermatik.s    292 | Code        | 11 |         |    1 | 00/811A : 18          |             CLC                  
-  293 |  1 keplermatik.s    293 | Code        | 11 |         |    2 | 00/811B : A5 FC       |             LDA   {$FC}          
-  294 |  1 keplermatik.s    294 | Code        | 11 |         |    2 | 00/811D : 69 44       |             ADC   #{$44}         
-  295 |  1 keplermatik.s    295 | Code        | 11 |         |    2 | 00/811F : 85 ED       |             STA   {$ED}          
-  296 |  1 keplermatik.s    296 | Code        | 11 |         |    2 | 00/8121 : A5 FD       |             LDA   {$FC}+1        
-  297 |  1 keplermatik.s    297 | Code        | 11 |         |    2 | 00/8123 : 69 00       |             ADC   #$00           
-  298 |  1 keplermatik.s    298 | Code        | 11 |         |    2 | 00/8125 : 85 EE       |             STA   {$ED}+1        
-  299 |  1 keplermatik.s    299 | Code        | 11 |         |    1 | 00/8127 : 60          |             RTS                  
-  300 |  1 keplermatik.s    300 | Empty       | 11 |         |    0 | 00/8128               |                                  
-  301 |  1 keplermatik.s    301 | Code        | 11 |         |    2 | 00/8128 : A5 FC       | EORCHK      LDA   {$FC}          ; WE ARE HITTING ROW ONE BYTE EARLY
-  302 |  1 keplermatik.s    302 | Code        | 11 |         |    2 | 00/812A : C5 ED       |             CMP   {$ED}          ; CHANGE TO RUN OFF BMPPTR
-  303 |  1 keplermatik.s    303 | Code        | 11 |         |    2 | 00/812C : D0 E6       |             BNE   RSTBMPP        ; EARLY CHECK LSB FOR END OF ROW
-  304 |  1 keplermatik.s    304 | Code        | 11 |         |    2 | 00/812E : A5 FD       |             LDA   {$FC}+1        
-  305 |  1 keplermatik.s    305 | Code        | 11 |         |    2 | 00/8130 : C5 EE       |             CMP   {$ED}+1        
-  306 |  1 keplermatik.s    306 | Code        | 11 |         |    2 | 00/8132 : D0 E0       |             BNE   RSTBMPP        ; IF NOT AT END OF ROW, GO RESET BMPPTR
-  307 |  1 keplermatik.s    307 | Empty       | 11 |         |    0 | 00/8134               |                                  
-  308 |  1 keplermatik.s    308 | Comment     | 11 |         |    0 | 00/8134               |                             ; SO YOU SAY WE'RE AT THE END OF ROW
-  309 |  1 keplermatik.s    309 | Code        | 11 |         |    2 | 00/8134 : A5 EC       |             LDA   {$EB}+1        ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL *
-  310 |  1 keplermatik.s    310 | Code        | 11 |         |    2 | 00/8136 : C9 3F       |             CMP   #$3F           ; SORT OF CONDITIONS TO CHECK OUT
-  311 |  1 keplermatik.s    311 | Code        | 11 |         |    2 | 00/8138 : D0 0E       |             BNE   CHKBOXP        
-  312 |  1 keplermatik.s    312 | Code        | 11 |         |    2 | 00/813A : A5 EB       |             LDA   {$EB}          ; CHECK LOW BYTE
-  313 |  1 keplermatik.s    313 | Code        | 11 |         |    2 | 00/813C : C9 A7       |             CMP   #$A7           ; FIRST GAP IN FRAMEBUFFER MAP
-  314 |  1 keplermatik.s    314 | Code        | 11 |         |    2 | 00/813E : F0 48       |             BEQ   GP3FA7         
-  315 |  1 keplermatik.s    315 | Code        | 11 |         |    2 | 00/8140 : C9 CF       |             CMP   #$CF           ; SECOND GAP IN FRAMEBUFFER MAP
-  316 |  1 keplermatik.s    316 | Code        | 11 |         |    2 | 00/8142 : F0 4F       |             BEQ   GP3FCF         
-  317 |  1 keplermatik.s    317 | Code        | 11 |         |    2 | 00/8144 : C9 F7       |             CMP   #$F7           ; END OF FILE
-  318 |  1 keplermatik.s    318 | Code        | 11 |         |    2 | 00/8146 : F0 56       |             BEQ   DISPGFX        
-  319 |  1 keplermatik.s    319 | Empty       | 11 |         |    0 | 00/8148               |                                  
-  320 |  1 keplermatik.s    320 | Code        | 11 |         |    2 | 00/8148 : A5 EB       | CHKBOXP     LDA   {$EB}          
-  321 |  1 keplermatik.s    321 | Code        | 11 |         |    2 | 00/814A : 29 3F       |             AND   #$3F           ; APPLY MASK FOR B00111111
-  322 |  1 keplermatik.s    322 | Code        | 11 |         |    2 | 00/814C : C9 27       |             CMP   #$27           ; MASKED VALUE = B00100111?
-  323 |  1 keplermatik.s    323 | Code        | 11 |         |    2 | 00/814E : F0 10       |             BEQ   CHKBOXP2       
-  324 |  1 keplermatik.s    324 | Code        | 11 |         |    2 | 00/8150 : A5 EB       |             LDA   {$EB}          
-  325 |  1 keplermatik.s    325 | Code        | 11 |         |    2 | 00/8152 : 29 7F       |             AND   #$7F           
-  326 |  1 keplermatik.s    326 | Code        | 11 |         |    2 | 00/8154 : C9 4F       |             CMP   #$4F           
-  327 |  1 keplermatik.s    327 | Code        | 11 |         |    2 | 00/8156 : F0 08       |             BEQ   CHKBOXP2       
-  328 |  1 keplermatik.s    328 | Code        | 11 |         |    2 | 00/8158 : A5 EB       |             LDA   {$EB}          
-  329 |  1 keplermatik.s    329 | Code        | 11 |         |    2 | 00/815A : 29 7F       |             AND   #$7F           
-  330 |  1 keplermatik.s    330 | Code        | 11 |         |    2 | 00/815C : C9 77       |             CMP   #$77           
-  331 |  1 keplermatik.s    331 | Code        | 11 |         |    2 | 00/815E : D0 08       |             BNE   INCBOXP        ; IF NOT, GO TO THE NEXT OFFSET IN THE BOX
-  332 |  1 keplermatik.s    332 | Empty       | 11 |         |    0 | 00/8160               |                                  
-  333 |  1 keplermatik.s    333 | Code        | 11 |         |    2 | 00/8160 : A5 EC       | CHKBOXP2    LDA   {$EB}+1        
-  334 |  1 keplermatik.s    334 | Code        | 11 |         |    2 | 00/8162 : 29 3C       |             AND   #$3C           ; APPLY MASK FOR B00111100
-  335 |  1 keplermatik.s    335 | Code        | 11 |         |    2 | 00/8164 : C9 3C       |             CMP   #$3C           ; MASKED VALUE = B00111100?
-  336 |  1 keplermatik.s    336 | Code        | 11 |         |    2 | 00/8166 : F0 10       |             BEQ   RESBOXP        ; IF SO, RESET BOX OFFSET BACK TO 0
-  337 |  1 keplermatik.s    337 | Empty       | 11 |         |    0 | 00/8168               |                                  
-  338 |  1 keplermatik.s    338 | Code        | 11 |         |    1 | 00/8168 : 18          | INCBOXP     CLC                  ; INCREMENT GFXPTR BY THE BOX LINE OFFSET
-  339 |  1 keplermatik.s    339 | Code        | 11 |         |    2 | 00/8169 : A5 EB       |             LDA   {$EB}          ; BOX LINE OFFSETS ARE $0400 APART BUT ONLY
-  340 |  1 keplermatik.s    340 | Code        | 11 |         |    2 | 00/816B : 69 D9       |             ADC   #$D9           ; $03D9 FROM THE END OF ONE LINE TO THE
-  341 |  1 keplermatik.s    341 | Code        | 11 |         |    2 | 00/816D : 85 EB       |             STA   {$EB}          ; BEGINNING OF THE NEXT
-  342 |  1 keplermatik.s    342 | Code        | 11 |         |    2 | 00/816F : A5 EC       |             LDA   {$EB}+1        
-  343 |  1 keplermatik.s    343 | Code        | 11 |         |    2 | 00/8171 : 69 03       |             ADC   #$03           
-  344 |  1 keplermatik.s    344 | Code        | 11 |         |    2 | 00/8173 : 85 EC       |             STA   {$EB}+1        
-  345 |  1 keplermatik.s    345 | Code        | 11 |         |    3 | 00/8175 : 4C F1 80    |             JMP   DECBMP         
-  346 |  1 keplermatik.s    346 | Empty       | 11 |         |    0 | 00/8178               |                                  
-  347 |  1 keplermatik.s    347 | Code        | 11 |         |    1 | 00/8178 : 38          | RESBOXP     SEC                  ; RESET BOX LINE OFFSET BY JUMPING TO THE
-  348 |  1 keplermatik.s    348 | Code        | 11 |         |    2 | 00/8179 : A5 EB       |             LDA   {$EB}          ; NEXT FRAMEBUFFER OFFSET WHERE BOX LINE
-  349 |  1 keplermatik.s    349 | Code        | 11 |         |    2 | 00/817B : E9 A7       |             SBC   #$A7           ; OFFSET IS ZERO
-  350 |  1 keplermatik.s    350 | Code        | 11 |         |    2 | 00/817D : 85 EB       |             STA   {$EB}          
-  351 |  1 keplermatik.s    351 | Code        | 11 |         |    2 | 00/817F : A5 EC       |             LDA   {$EB}+1        
-  352 |  1 keplermatik.s    352 | Code        | 11 |         |    2 | 00/8181 : E9 1B       |             SBC   #$1B           
-  353 |  1 keplermatik.s    353 | Code        | 11 |         |    2 | 00/8183 : 85 EC       |             STA   {$EB}+1        
-  354 |  1 keplermatik.s    354 | Code        | 11 |         |    3 | 00/8185 : 4C F1 80    |             JMP   DECBMP         
-  355 |  1 keplermatik.s    355 | Empty       | 11 |         |    0 | 00/8188               |                                  
-  356 |  1 keplermatik.s    356 | Code        | 11 |         |    2 | 00/8188 : A9 28       | GP3FA7      LDA   #$28           ; JUMP GFXPTR FROM $3FA7 TO $2028
-  357 |  1 keplermatik.s    357 | Code        | 11 |         |    2 | 00/818A : 85 EB       |             STA   {$EB}          
-  358 |  1 keplermatik.s    358 | Code        | 11 |         |    2 | 00/818C : A9 20       |             LDA   #$20           
-  359 |  1 keplermatik.s    359 | Code        | 11 |         |    2 | 00/818E : 85 EC       |             STA   {$EB}+1        
-  360 |  1 keplermatik.s    360 | Code        | 11 |         |    3 | 00/8190 : 4C F1 80    |             JMP   DECBMP         
-  361 |  1 keplermatik.s    361 | Empty       | 11 |         |    0 | 00/8193               |                                  
-  362 |  1 keplermatik.s    362 | Code        | 11 |         |    2 | 00/8193 : A9 50       | GP3FCF      LDA   #$50           ; JUMP GFXPTR FROM $3FCF TO $2050
-  363 |  1 keplermatik.s    363 | Code        | 11 |         |    2 | 00/8195 : 85 EB       |             STA   {$EB}          
-  364 |  1 keplermatik.s    364 | Code        | 11 |         |    2 | 00/8197 : A9 20       |             LDA   #$20           
-  365 |  1 keplermatik.s    365 | Code        | 11 |         |    2 | 00/8199 : 85 EC       |             STA   {$EB}+1        
-  366 |  1 keplermatik.s    366 | Code        | 11 |         |    3 | 00/819B : 4C F1 80    |             JMP   DECBMP         
-  367 |  1 keplermatik.s    367 | Empty       | 11 |         |    0 | 00/819E               |                                  
-  368 |  1 keplermatik.s    368 | Code        | 11 |         |    3 | 00/819E : AD 57 C0    | DISPGFX     LDA   $C057          
-  369 |  1 keplermatik.s    369 | Code        | 11 |         |    3 | 00/81A1 : AD 50 C0    |             LDA   $C050          
-  370 |  1 keplermatik.s    370 | Code        | 11 |         |    3 | 00/81A4 : AD 5E C0    |             LDA   $C05E          
-  371 |  1 keplermatik.s    371 | Code        | 11 |         |    3 | 00/81A7 : AD 53 C0    |             LDA   $C053          
-  372 |  1 keplermatik.s    372 | Code        | 11 |         |    3 | 00/81AA : 8D 0D C0    |             STA   $C00D          
-  373 |  1 keplermatik.s    373 | Code        | 11 |         |    2 | 00/81AD : A9 00       |             LDA   #$00           
-  374 |  1 keplermatik.s    374 | Code        | 11 |         |    3 | 00/81AF : 8D 5E C0    |             STA   $C05E          
-  375 |  1 keplermatik.s    375 | Code        | 11 |         |    3 | 00/81B2 : AD 55 C0    |             LDA   $C055          
-  376 |  1 keplermatik.s    376 | Code        | 11 |         |    1 | 00/81B5 : 60          |             RTS                  
-  377 |  1 keplermatik.s    377 | Empty       | 11 |         |    0 | 00/81B6               |                                  
-  378 |  1 keplermatik.s    378 | Code        | 11 |         |    2 | 00/81B6 : A9 D8       | PRSTATUS    LDA   #$D8           ;'X'
-  379 |  1 keplermatik.s    379 | Code        | 11 |         |    3 | 00/81B8 : 20 ED FD    |             JSR   {$FDED}        
-  380 |  1 keplermatik.s    380 | Code        | 11 |         |    1 | 00/81BB : 8A          |             TXA                  ; PRINT BMP BIT COUNTER
-  381 |  1 keplermatik.s    381 | Code        | 11 |         |    3 | 00/81BC : 20 DA FD    |             JSR   {$FDDA}        
-  382 |  1 keplermatik.s    382 | Code        | 11 |         |    2 | 00/81BF : A9 A0       |             LDA   #$A0           ;' '
-  383 |  1 keplermatik.s    383 | Code        | 11 |         |    3 | 00/81C1 : 20 ED FD    |             JSR   {$FDED}        
-  384 |  1 keplermatik.s    384 | Code        | 11 |         |    2 | 00/81C4 : A9 D9       |             LDA   #$D9           ;'Y'
-  385 |  1 keplermatik.s    385 | Code        | 11 |         |    3 | 00/81C6 : 20 ED FD    |             JSR   {$FDED}        
-  386 |  1 keplermatik.s    386 | Code        | 11 |         |    1 | 00/81C9 : 98          |             TYA                  ; PRINT GFX BIT COUNTER
-  387 |  1 keplermatik.s    387 | Code        | 11 |         |    3 | 00/81CA : 20 DA FD    |             JSR   {$FDDA}        
-  388 |  1 keplermatik.s    388 | Code        | 11 |         |    2 | 00/81CD : A9 A0       |             LDA   #$A0           ;' '
-  389 |  1 keplermatik.s    389 | Code        | 11 |         |    3 | 00/81CF : 20 ED FD    |             JSR   {$FDED}        
-  390 |  1 keplermatik.s    390 | Code        | 11 |         |    2 | 00/81D2 : A9 C2       |             LDA   #$C2           ;'B'
-  391 |  1 keplermatik.s    391 | Code        | 11 |         |    3 | 00/81D4 : 20 ED FD    |             JSR   {$FDED}        
-  392 |  1 keplermatik.s    392 | Code        | 11 |         |    2 | 00/81D7 : A5 FD       |             LDA   {$FC}+1        ;PRINT BMP POINTER ADDRESS
-  393 |  1 keplermatik.s    393 | Code        | 11 |         |    3 | 00/81D9 : 20 DA FD    |             JSR   {$FDDA}        
-  394 |  1 keplermatik.s    394 | Code        | 11 |         |    2 | 00/81DC : A5 FC       |             LDA   {$FC}          
-  395 |  1 keplermatik.s    395 | Code        | 11 |         |    3 | 00/81DE : 20 DA FD    |             JSR   {$FDDA}        
-  396 |  1 keplermatik.s    396 | Code        | 11 |         |    2 | 00/81E1 : A9 A0       |             LDA   #$A0           ;' '
-  397 |  1 keplermatik.s    397 | Code        | 11 |         |    3 | 00/81E3 : 20 ED FD    |             JSR   {$FDED}        
-  398 |  1 keplermatik.s    398 | Code        | 11 |         |    2 | 00/81E6 : A9 C7       |             LDA   #$C7           ;'G'
-  399 |  1 keplermatik.s    399 | Code        | 11 |         |    3 | 00/81E8 : 20 ED FD    |             JSR   {$FDED}        
-  400 |  1 keplermatik.s    400 | Code        | 11 |         |    2 | 00/81EB : A5 EC       |             LDA   {$EB}+1        ;PRINT GFX POINTER ADDRESS
-  401 |  1 keplermatik.s    401 | Code        | 11 |         |    3 | 00/81ED : 20 DA FD    |             JSR   {$FDDA}        
-  402 |  1 keplermatik.s    402 | Code        | 11 |         |    2 | 00/81F0 : A5 EB       |             LDA   {$EB}          
-  403 |  1 keplermatik.s    403 | Code        | 11 |         |    3 | 00/81F2 : 20 DA FD    |             JSR   {$FDDA}        
-  404 |  1 keplermatik.s    404 | Code        | 11 |         |    3 | 00/81F5 : 20 8E FD    |             JSR   {$FD8E}        
-  405 |  1 keplermatik.s    405 | Code        | 11 |         |    1 | 00/81F8 : 60          |             RTS                  
-  406 |  1 keplermatik.s    406 | Empty       | 11 |         |    0 | 00/81F9               |                                  
-  407 |  1 keplermatik.s    407 | Comment     | 11 |         |    0 | 00/81F9               | *
-  408 |  1 keplermatik.s    408 | Comment     | 11 |         |    0 | 00/81F9               | ********************************
-  409 |  1 keplermatik.s    409 | Comment     | 11 |         |    0 | 00/81F9               | * DISABLE /RAM VOLUME TO FREE  *
-  410 |  1 keplermatik.s    410 | Comment     | 11 |         |    0 | 00/81F9               | * AUX MEMORY FOR USE           *
-  411 |  1 keplermatik.s    411 | Comment     | 11 |         |    0 | 00/81F9               | ********************************
-  412 |  1 keplermatik.s    412 | Empty       | 11 |         |    0 | 00/81F9               |                                  
-  413 |  1 keplermatik.s    413 | Code        | 11 |         |    3 | 00/81F9 : AD 98 BF    | REMOVE      LDA   $BF98          
-  414 |  1 keplermatik.s    414 | Code        | 11 |         |    2 | 00/81FC : 29 30       |             AND   #$30           
-  415 |  1 keplermatik.s    415 | Code        | 11 |         |    2 | 00/81FE : C9 30       |             CMP   #$30           
-  416 |  1 keplermatik.s    416 | Code        | 11 |         |    2 | 00/8200 : D0 10       |             BNE   NORAM          
-  417 |  1 keplermatik.s    417 | Code        | 11 |         |    3 | 00/8202 : AD 26 BF    |             LDA   $BF26          
-  418 |  1 keplermatik.s    418 | Code        | 11 |         |    3 | 00/8205 : CD 16 BF    |             CMP   $BF16          
-  419 |  1 keplermatik.s    419 | Code        | 11 |         |    2 | 00/8208 : D0 0A       |             BNE   GOTRAM         
-  420 |  1 keplermatik.s    420 | Code        | 11 |         |    3 | 00/820A : AD 27 BF    |             LDA   $BF27          
-  421 |  1 keplermatik.s    421 | Code        | 11 |         |    3 | 00/820D : CD 17 BF    |             CMP   $BF17          
-  422 |  1 keplermatik.s    422 | Code        | 11 |         |    2 | 00/8210 : D0 02       |             BNE   GOTRAM         
-  423 |  1 keplermatik.s    423 | Code        | 11 |         |    1 | 00/8212 : 38          | NORAM       SEC                  
-  424 |  1 keplermatik.s    424 | Code        | 11 |         |    1 | 00/8213 : 60          | OKXIT       RTS                  
-  425 |  1 keplermatik.s    425 | Code        | 11 |         |    3 | 00/8214 : AD 26 BF    | GOTRAM      LDA   $BF26          
-  426 |  1 keplermatik.s    426 | Code        | 11 |         |    3 | 00/8217 : 8D 57 82    |             STA   OLDVEC         
-  427 |  1 keplermatik.s    427 | Code        | 11 |         |    3 | 00/821A : AD 27 BF    |             LDA   $BF27          
-  428 |  1 keplermatik.s    428 | Code        | 11 |         |    3 | 00/821D : 8D 58 82    |             STA   OLDVEC+1       
-  429 |  1 keplermatik.s    429 | Code        | 11 |         |    3 | 00/8220 : AD 16 BF    |             LDA   $BF16          
-  430 |  1 keplermatik.s    430 | Code        | 11 |         |    3 | 00/8223 : 8D 26 BF    |             STA   $BF26          
-  431 |  1 keplermatik.s    431 | Code        | 11 |         |    3 | 00/8226 : AD 17 BF    |             LDA   $BF17          
-  432 |  1 keplermatik.s    432 | Code        | 11 |         |    3 | 00/8229 : 8D 27 BF    |             STA   $BF27          
-  433 |  1 keplermatik.s    433 | Code        | 11 |         |    3 | 00/822C : AE 31 BF    |             LDX   $BF31          
-  434 |  1 keplermatik.s    434 | Code        | 11 |         |    3 | 00/822F : BD 32 BF    | DEVLP       LDA   $BF32,X        
-  435 |  1 keplermatik.s    435 | Code        | 11 |         |    2 | 00/8232 : 29 70       |             AND   #$70           
-  436 |  1 keplermatik.s    436 | Code        | 11 |         |    2 | 00/8234 : C9 30       |             CMP   #$30           
-  437 |  1 keplermatik.s    437 | Code        | 11 |         |    2 | 00/8236 : F0 05       |             BEQ   GOTSLT         
-  438 |  1 keplermatik.s    438 | Code        | 11 |         |    1 | 00/8238 : CA          |             DEX                  
-  439 |  1 keplermatik.s    439 | Code        | 11 |         |    2 | 00/8239 : 10 F4       |             BPL   DEVLP          
-  440 |  1 keplermatik.s    440 | Code        | 11 |         |    2 | 00/823B : 30 D5       |             BMI   NORAM          
-  441 |  1 keplermatik.s    441 | Code        | 11 |         |    3 | 00/823D : BD 33 BF    | GOTSLT      LDA   $BF32+1,X      
-  442 |  1 keplermatik.s    442 | Code        | 11 |         |    3 | 00/8240 : 9D 32 BF    |             STA   $BF32,X        
-  443 |  1 keplermatik.s    443 | Code        | 11 |         |    1 | 00/8243 : E8          |             INX                  
-  444 |  1 keplermatik.s    444 | Code        | 11 |         |    3 | 00/8244 : EC 31 BF    |             CPX   $BF31          
-  445 |  1 keplermatik.s    445 | Code        | 11 |         |    2 | 00/8247 : B0 03       |             BCS   FINSLT         
-  446 |  1 keplermatik.s    446 | Code        | 11 |         |    3 | 00/8249 : 4C 3D 82    |             JMP   GOTSLT         
-  447 |  1 keplermatik.s    447 | Code        | 11 |         |    3 | 00/824C : CE 31 BF    | FINSLT      DEC   $BF31          
-  448 |  1 keplermatik.s    448 | Code        | 11 |         |    2 | 00/824F : A9 00       |             LDA   #$00           
-  449 |  1 keplermatik.s    449 | Code        | 11 |         |    3 | 00/8251 : 9D 32 BF    |             STA   $BF32,X        
-  450 |  1 keplermatik.s    450 | Code        | 11 |         |    1 | 00/8254 : 18          |             CLC                  
-  451 |  1 keplermatik.s    451 | Code        | 11 |         |    2 | 00/8255 : 90 BC       |             BCC   OKXIT          
-  452 |  1 keplermatik.s    452 | Data        | 11 |         |    2 | 00/8257 : 00 00       | OLDVEC      DW    0              
-  453 |  1 keplermatik.s    453 | Empty       | 11 |         |    0 | 00/8259               |                                  
-  454 |  1 keplermatik.s    454 | Empty       | 11 |         |    0 | 00/8259               |                                  
-  455 |  1 keplermatik.s    455 | Comment     | 11 |         |    0 | 00/8259               | ********************************
-  456 |  1 keplermatik.s    456 | Comment     | 11 |         |    0 | 00/8259               | * PARAMS TABLE                 *
-  457 |  1 keplermatik.s    457 | Comment     | 11 |         |    0 | 00/8259               | ********************************
-  458 |  1 keplermatik.s    458 | Empty       | 11 |         |    0 | 00/8259               |                                  
-  459 |  1 keplermatik.s    459 | Data        | 11 |         |    1 | 00/8259 : 03          | PARAMS      DFB   3              
-  460 |  1 keplermatik.s    460 | Data        | 11 |         |    2 | 00/825A : 60 82       |             DW    FILENAME       
-  461 |  1 keplermatik.s    461 | Data        | 11 |         |    2 | 00/825C : 00 82       |             DW    $8200          
-  462 |  1 keplermatik.s    462 | Data        | 11 |         |    2 | 00/825E : AA AA       |             DW    $AAAA          
-  463 |  1 keplermatik.s    463 | Comment     | 11 |         |    0 | 00/8260               | *
-  464 |  1 keplermatik.s    464 | Data        | 11 |         |    1 | 00/8260 : 11          | FILENAME    DFB   {ozunid_1}-NAME
-  465 |  1 keplermatik.s    465 | Data        | 11 |         |   17 | 00/8261 : AF C5 D8 C1 | NAME        ASC   "/EXAMPLES/MAP.BMP"
+  267 |  1 keplermatik.s    267 | Code        | 11 |         |    1 | 00/80F1 : 38          | DECBMP      SEC                  
+  268 |  1 keplermatik.s    268 | Code        | 11 |         |    2 | 00/80F2 : A5 FC       |             LDA   {$FC}          
+  269 |  1 keplermatik.s    269 | Code        | 11 |         |    2 | 00/80F4 : E9 8E       |             SBC   #$8E           
+  270 |  1 keplermatik.s    270 | Code        | 11 |         |    2 | 00/80F6 : 85 FC       |             STA   {$FC}          
+  271 |  1 keplermatik.s    271 | Code        | 11 |         |    2 | 00/80F8 : A5 FD       |             LDA   {$FC}+1        
+  272 |  1 keplermatik.s    272 | Code        | 11 |         |    2 | 00/80FA : E9 00       |             SBC   #$00           
+  273 |  1 keplermatik.s    273 | Code        | 11 |         |    2 | 00/80FC : 85 FD       |             STA   {$FC}+1        
+  274 |  1 keplermatik.s    274 | Code        | 11 |         |    3 | 00/80FE : 20 1A 81    |             JSR   RSTEORP        
+  275 |  1 keplermatik.s    275 | Code        | 11 |         |    3 | 00/8101 : 4C B1 80    |             JMP   PIXPOKEY       
+  276 |  1 keplermatik.s    276 | Empty       | 11 |         |    0 | 00/8104               |                                  
+  277 |  1 keplermatik.s    277 | Code        | 11 |         |    1 | 00/8104 : 18          | INCBMPP     CLC                  ;INCREMENT BMP POINTER
+  278 |  1 keplermatik.s    278 | Code        | 11 |         |    2 | 00/8105 : A5 FC       |             LDA   {$FC}          
+  279 |  1 keplermatik.s    279 | Code        | 11 |         |    2 | 00/8107 : 69 01       |             ADC   #$01           
+  280 |  1 keplermatik.s    280 | Code        | 11 |         |    2 | 00/8109 : 85 FC       |             STA   {$FC}          
+  281 |  1 keplermatik.s    281 | Code        | 11 |         |    2 | 00/810B : A5 FD       |             LDA   {$FC}+1        
+  282 |  1 keplermatik.s    282 | Code        | 11 |         |    2 | 00/810D : 69 00       |             ADC   #$00           
+  283 |  1 keplermatik.s    283 | Code        | 11 |         |    2 | 00/810F : 85 FD       |             STA   {$FC}+1        
+  284 |  1 keplermatik.s    284 | Code        | 11 |         |    2 | 00/8111 : A2 08       |             LDX   #{$08}         
+  285 |  1 keplermatik.s    285 | Code        | 11 |         |    1 | 00/8113 : 60          |             RTS                  
+  286 |  1 keplermatik.s    286 | Empty       | 11 |         |    0 | 00/8114               |                                  
+  287 |  1 keplermatik.s    287 | Code        | 11 |         |    3 | 00/8114 : 20 04 81    | RSTBMPP     JSR   INCBMPP        
+  288 |  1 keplermatik.s    288 | Code        | 11 |         |    3 | 00/8117 : 4C CA 80    |             JMP   PIXPOKE2       
+  289 |  1 keplermatik.s    289 | Empty       | 11 |         |    0 | 00/811A               |                                  
+  290 |  1 keplermatik.s    290 | Empty       | 11 |         |    0 | 00/811A               | RSTEORP                          ;JSR   INCBMPP
+  291 |  1 keplermatik.s    291 | Code        | 11 |         |    1 | 00/811A : 18          |             CLC                  
+  292 |  1 keplermatik.s    292 | Code        | 11 |         |    2 | 00/811B : A5 FC       |             LDA   {$FC}          
+  293 |  1 keplermatik.s    293 | Code        | 11 |         |    2 | 00/811D : 69 44       |             ADC   #{$44}         
+  294 |  1 keplermatik.s    294 | Code        | 11 |         |    2 | 00/811F : 85 ED       |             STA   {$ED}          
+  295 |  1 keplermatik.s    295 | Code        | 11 |         |    2 | 00/8121 : A5 FD       |             LDA   {$FC}+1        
+  296 |  1 keplermatik.s    296 | Code        | 11 |         |    2 | 00/8123 : 69 00       |             ADC   #$00           
+  297 |  1 keplermatik.s    297 | Code        | 11 |         |    2 | 00/8125 : 85 EE       |             STA   {$ED}+1        
+  298 |  1 keplermatik.s    298 | Code        | 11 |         |    1 | 00/8127 : 60          |             RTS                  
+  299 |  1 keplermatik.s    299 | Empty       | 11 |         |    0 | 00/8128               |                                  
+  300 |  1 keplermatik.s    300 | Code        | 11 |         |    2 | 00/8128 : A5 FC       | EORCHK      LDA   {$FC}          ; WE ARE HITTING ROW ONE BYTE EARLY
+  301 |  1 keplermatik.s    301 | Code        | 11 |         |    2 | 00/812A : C5 ED       |             CMP   {$ED}          ; CHANGE TO RUN OFF BMPPTR
+  302 |  1 keplermatik.s    302 | Code        | 11 |         |    2 | 00/812C : D0 E6       |             BNE   RSTBMPP        ; EARLY CHECK LSB FOR END OF ROW
+  303 |  1 keplermatik.s    303 | Code        | 11 |         |    2 | 00/812E : A5 FD       |             LDA   {$FC}+1        
+  304 |  1 keplermatik.s    304 | Code        | 11 |         |    2 | 00/8130 : C5 EE       |             CMP   {$ED}+1        
+  305 |  1 keplermatik.s    305 | Code        | 11 |         |    2 | 00/8132 : D0 E0       |             BNE   RSTBMPP        ; IF NOT AT END OF ROW, GO RESET BMPPTR
+  306 |  1 keplermatik.s    306 | Empty       | 11 |         |    0 | 00/8134               |                                  
+  307 |  1 keplermatik.s    307 | Comment     | 11 |         |    0 | 00/8134               |                             ; SO YOU SAY WE'RE AT THE END OF ROW
+  308 |  1 keplermatik.s    308 | Code        | 11 |         |    2 | 00/8134 : A5 EC       |             LDA   {$EB}+1        ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL *
+  309 |  1 keplermatik.s    309 | Code        | 11 |         |    2 | 00/8136 : C9 3F       |             CMP   #$3F           ; SORT OF CONDITIONS TO CHECK OUT
+  310 |  1 keplermatik.s    310 | Code        | 11 |         |    2 | 00/8138 : D0 0E       |             BNE   CHKBOXP        
+  311 |  1 keplermatik.s    311 | Code        | 11 |         |    2 | 00/813A : A5 EB       |             LDA   {$EB}          ; CHECK LOW BYTE
+  312 |  1 keplermatik.s    312 | Code        | 11 |         |    2 | 00/813C : C9 A7       |             CMP   #$A7           ; FIRST GAP IN FRAMEBUFFER MAP
+  313 |  1 keplermatik.s    313 | Code        | 11 |         |    2 | 00/813E : F0 48       |             BEQ   GP3FA7         
+  314 |  1 keplermatik.s    314 | Code        | 11 |         |    2 | 00/8140 : C9 CF       |             CMP   #$CF           ; SECOND GAP IN FRAMEBUFFER MAP
+  315 |  1 keplermatik.s    315 | Code        | 11 |         |    2 | 00/8142 : F0 4F       |             BEQ   GP3FCF         
+  316 |  1 keplermatik.s    316 | Code        | 11 |         |    2 | 00/8144 : C9 F7       |             CMP   #$F7           ; END OF FILE
+  317 |  1 keplermatik.s    317 | Code        | 11 |         |    2 | 00/8146 : F0 56       |             BEQ   DISPGFX        
+  318 |  1 keplermatik.s    318 | Empty       | 11 |         |    0 | 00/8148               |                                  
+  319 |  1 keplermatik.s    319 | Code        | 11 |         |    2 | 00/8148 : A5 EB       | CHKBOXP     LDA   {$EB}          
+  320 |  1 keplermatik.s    320 | Code        | 11 |         |    2 | 00/814A : 29 3F       |             AND   #$3F           ; APPLY MASK FOR B00111111
+  321 |  1 keplermatik.s    321 | Code        | 11 |         |    2 | 00/814C : C9 27       |             CMP   #$27           ; MASKED VALUE = B00100111?
+  322 |  1 keplermatik.s    322 | Code        | 11 |         |    2 | 00/814E : F0 10       |             BEQ   CHKBOXP2       
+  323 |  1 keplermatik.s    323 | Code        | 11 |         |    2 | 00/8150 : A5 EB       |             LDA   {$EB}          
+  324 |  1 keplermatik.s    324 | Code        | 11 |         |    2 | 00/8152 : 29 7F       |             AND   #$7F           
+  325 |  1 keplermatik.s    325 | Code        | 11 |         |    2 | 00/8154 : C9 4F       |             CMP   #$4F           
+  326 |  1 keplermatik.s    326 | Code        | 11 |         |    2 | 00/8156 : F0 08       |             BEQ   CHKBOXP2       
+  327 |  1 keplermatik.s    327 | Code        | 11 |         |    2 | 00/8158 : A5 EB       |             LDA   {$EB}          
+  328 |  1 keplermatik.s    328 | Code        | 11 |         |    2 | 00/815A : 29 7F       |             AND   #$7F           
+  329 |  1 keplermatik.s    329 | Code        | 11 |         |    2 | 00/815C : C9 77       |             CMP   #$77           
+  330 |  1 keplermatik.s    330 | Code        | 11 |         |    2 | 00/815E : D0 08       |             BNE   INCBOXP        ; IF NOT, GO TO THE NEXT OFFSET IN THE BOX
+  331 |  1 keplermatik.s    331 | Empty       | 11 |         |    0 | 00/8160               |                                  
+  332 |  1 keplermatik.s    332 | Code        | 11 |         |    2 | 00/8160 : A5 EC       | CHKBOXP2    LDA   {$EB}+1        
+  333 |  1 keplermatik.s    333 | Code        | 11 |         |    2 | 00/8162 : 29 3C       |             AND   #$3C           ; APPLY MASK FOR B00111100
+  334 |  1 keplermatik.s    334 | Code        | 11 |         |    2 | 00/8164 : C9 3C       |             CMP   #$3C           ; MASKED VALUE = B00111100?
+  335 |  1 keplermatik.s    335 | Code        | 11 |         |    2 | 00/8166 : F0 10       |             BEQ   RESBOXP        ; IF SO, RESET BOX OFFSET BACK TO 0
+  336 |  1 keplermatik.s    336 | Empty       | 11 |         |    0 | 00/8168               |                                  
+  337 |  1 keplermatik.s    337 | Code        | 11 |         |    1 | 00/8168 : 18          | INCBOXP     CLC                  ; INCREMENT GFXPTR BY THE BOX LINE OFFSET
+  338 |  1 keplermatik.s    338 | Code        | 11 |         |    2 | 00/8169 : A5 EB       |             LDA   {$EB}          ; BOX LINE OFFSETS ARE $0400 APART BUT ONLY
+  339 |  1 keplermatik.s    339 | Code        | 11 |         |    2 | 00/816B : 69 D9       |             ADC   #$D9           ; $03D9 FROM THE END OF ONE LINE TO THE
+  340 |  1 keplermatik.s    340 | Code        | 11 |         |    2 | 00/816D : 85 EB       |             STA   {$EB}          ; BEGINNING OF THE NEXT
+  341 |  1 keplermatik.s    341 | Code        | 11 |         |    2 | 00/816F : A5 EC       |             LDA   {$EB}+1        
+  342 |  1 keplermatik.s    342 | Code        | 11 |         |    2 | 00/8171 : 69 03       |             ADC   #$03           
+  343 |  1 keplermatik.s    343 | Code        | 11 |         |    2 | 00/8173 : 85 EC       |             STA   {$EB}+1        
+  344 |  1 keplermatik.s    344 | Code        | 11 |         |    3 | 00/8175 : 4C F1 80    |             JMP   DECBMP         
+  345 |  1 keplermatik.s    345 | Empty       | 11 |         |    0 | 00/8178               |                                  
+  346 |  1 keplermatik.s    346 | Code        | 11 |         |    1 | 00/8178 : 38          | RESBOXP     SEC                  ; RESET BOX LINE OFFSET BY JUMPING TO THE
+  347 |  1 keplermatik.s    347 | Code        | 11 |         |    2 | 00/8179 : A5 EB       |             LDA   {$EB}          ; NEXT FRAMEBUFFER OFFSET WHERE BOX LINE
+  348 |  1 keplermatik.s    348 | Code        | 11 |         |    2 | 00/817B : E9 A7       |             SBC   #$A7           ; OFFSET IS ZERO
+  349 |  1 keplermatik.s    349 | Code        | 11 |         |    2 | 00/817D : 85 EB       |             STA   {$EB}          
+  350 |  1 keplermatik.s    350 | Code        | 11 |         |    2 | 00/817F : A5 EC       |             LDA   {$EB}+1        
+  351 |  1 keplermatik.s    351 | Code        | 11 |         |    2 | 00/8181 : E9 1B       |             SBC   #$1B           
+  352 |  1 keplermatik.s    352 | Code        | 11 |         |    2 | 00/8183 : 85 EC       |             STA   {$EB}+1        
+  353 |  1 keplermatik.s    353 | Code        | 11 |         |    3 | 00/8185 : 4C F1 80    |             JMP   DECBMP         
+  354 |  1 keplermatik.s    354 | Empty       | 11 |         |    0 | 00/8188               |                                  
+  355 |  1 keplermatik.s    355 | Code        | 11 |         |    2 | 00/8188 : A9 28       | GP3FA7      LDA   #$28           ; JUMP GFXPTR FROM $3FA7 TO $2028
+  356 |  1 keplermatik.s    356 | Code        | 11 |         |    2 | 00/818A : 85 EB       |             STA   {$EB}          
+  357 |  1 keplermatik.s    357 | Code        | 11 |         |    2 | 00/818C : A9 20       |             LDA   #$20           
+  358 |  1 keplermatik.s    358 | Code        | 11 |         |    2 | 00/818E : 85 EC       |             STA   {$EB}+1        
+  359 |  1 keplermatik.s    359 | Code        | 11 |         |    3 | 00/8190 : 4C F1 80    |             JMP   DECBMP         
+  360 |  1 keplermatik.s    360 | Empty       | 11 |         |    0 | 00/8193               |                                  
+  361 |  1 keplermatik.s    361 | Code        | 11 |         |    2 | 00/8193 : A9 50       | GP3FCF      LDA   #$50           ; JUMP GFXPTR FROM $3FCF TO $2050
+  362 |  1 keplermatik.s    362 | Code        | 11 |         |    2 | 00/8195 : 85 EB       |             STA   {$EB}          
+  363 |  1 keplermatik.s    363 | Code        | 11 |         |    2 | 00/8197 : A9 20       |             LDA   #$20           
+  364 |  1 keplermatik.s    364 | Code        | 11 |         |    2 | 00/8199 : 85 EC       |             STA   {$EB}+1        
+  365 |  1 keplermatik.s    365 | Code        | 11 |         |    3 | 00/819B : 4C F1 80    |             JMP   DECBMP         
+  366 |  1 keplermatik.s    366 | Empty       | 11 |         |    0 | 00/819E               |                                  
+  367 |  1 keplermatik.s    367 | Code        | 11 |         |    3 | 00/819E : AD 57 C0    | DISPGFX     LDA   $C057          
+  368 |  1 keplermatik.s    368 | Code        | 11 |         |    3 | 00/81A1 : AD 50 C0    |             LDA   $C050          
+  369 |  1 keplermatik.s    369 | Code        | 11 |         |    3 | 00/81A4 : AD 5E C0    |             LDA   $C05E          
+  370 |  1 keplermatik.s    370 | Code        | 11 |         |    3 | 00/81A7 : AD 53 C0    |             LDA   $C053          
+  371 |  1 keplermatik.s    371 | Code        | 11 |         |    3 | 00/81AA : 8D 0D C0    |             STA   $C00D          
+  372 |  1 keplermatik.s    372 | Code        | 11 |         |    2 | 00/81AD : A9 00       |             LDA   #$00           
+  373 |  1 keplermatik.s    373 | Code        | 11 |         |    3 | 00/81AF : 8D 5E C0    |             STA   $C05E          
+  374 |  1 keplermatik.s    374 | Code        | 11 |         |    3 | 00/81B2 : AD 55 C0    |             LDA   $C055          
+  375 |  1 keplermatik.s    375 | Code        | 11 |         |    1 | 00/81B5 : 60          |             RTS                  
+  376 |  1 keplermatik.s    376 | Empty       | 11 |         |    0 | 00/81B6               |                                  
+  377 |  1 keplermatik.s    377 | Code        | 11 |         |    3 | 00/81B6 : 8D 54 C0    | PRSTATUS    STA   $C054          
+  378 |  1 keplermatik.s    378 | Code        | 11 |         |    2 | 00/81B9 : A9 D8       |             LDA   #$D8           ;'X'
+  379 |  1 keplermatik.s    379 | Code        | 11 |         |    3 | 00/81BB : 20 ED FD    |             JSR   {$FDED}        
+  380 |  1 keplermatik.s    380 | Code        | 11 |         |    1 | 00/81BE : 8A          |             TXA                  ; PRINT BMP BIT COUNTER
+  381 |  1 keplermatik.s    381 | Code        | 11 |         |    3 | 00/81BF : 20 DA FD    |             JSR   {$FDDA}        
+  382 |  1 keplermatik.s    382 | Code        | 11 |         |    2 | 00/81C2 : A9 A0       |             LDA   #$A0           ;' '
+  383 |  1 keplermatik.s    383 | Code        | 11 |         |    3 | 00/81C4 : 20 ED FD    |             JSR   {$FDED}        
+  384 |  1 keplermatik.s    384 | Code        | 11 |         |    2 | 00/81C7 : A9 D9       |             LDA   #$D9           ;'Y'
+  385 |  1 keplermatik.s    385 | Code        | 11 |         |    3 | 00/81C9 : 20 ED FD    |             JSR   {$FDED}        
+  386 |  1 keplermatik.s    386 | Code        | 11 |         |    1 | 00/81CC : 98          |             TYA                  ; PRINT GFX BIT COUNTER
+  387 |  1 keplermatik.s    387 | Code        | 11 |         |    3 | 00/81CD : 20 DA FD    |             JSR   {$FDDA}        
+  388 |  1 keplermatik.s    388 | Code        | 11 |         |    2 | 00/81D0 : A9 A0       |             LDA   #$A0           ;' '
+  389 |  1 keplermatik.s    389 | Code        | 11 |         |    3 | 00/81D2 : 20 ED FD    |             JSR   {$FDED}        
+  390 |  1 keplermatik.s    390 | Code        | 11 |         |    2 | 00/81D5 : A9 C2       |             LDA   #$C2           ;'B'
+  391 |  1 keplermatik.s    391 | Code        | 11 |         |    3 | 00/81D7 : 20 ED FD    |             JSR   {$FDED}        
+  392 |  1 keplermatik.s    392 | Code        | 11 |         |    2 | 00/81DA : A5 FD       |             LDA   {$FC}+1        ;PRINT BMP POINTER ADDRESS
+  393 |  1 keplermatik.s    393 | Code        | 11 |         |    3 | 00/81DC : 20 DA FD    |             JSR   {$FDDA}        
+  394 |  1 keplermatik.s    394 | Code        | 11 |         |    2 | 00/81DF : A5 FC       |             LDA   {$FC}          
+  395 |  1 keplermatik.s    395 | Code        | 11 |         |    3 | 00/81E1 : 20 DA FD    |             JSR   {$FDDA}        
+  396 |  1 keplermatik.s    396 | Code        | 11 |         |    2 | 00/81E4 : A9 A0       |             LDA   #$A0           ;' '
+  397 |  1 keplermatik.s    397 | Code        | 11 |         |    3 | 00/81E6 : 20 ED FD    |             JSR   {$FDED}        
+  398 |  1 keplermatik.s    398 | Code        | 11 |         |    2 | 00/81E9 : A9 C7       |             LDA   #$C7           ;'G'
+  399 |  1 keplermatik.s    399 | Code        | 11 |         |    3 | 00/81EB : 20 ED FD    |             JSR   {$FDED}        
+  400 |  1 keplermatik.s    400 | Code        | 11 |         |    2 | 00/81EE : A5 EC       |             LDA   {$EB}+1        ;PRINT GFX POINTER ADDRESS
+  401 |  1 keplermatik.s    401 | Code        | 11 |         |    3 | 00/81F0 : 20 DA FD    |             JSR   {$FDDA}        
+  402 |  1 keplermatik.s    402 | Code        | 11 |         |    2 | 00/81F3 : A5 EB       |             LDA   {$EB}          
+  403 |  1 keplermatik.s    403 | Code        | 11 |         |    3 | 00/81F5 : 20 DA FD    |             JSR   {$FDDA}        
+  404 |  1 keplermatik.s    404 | Code        | 11 |         |    3 | 00/81F8 : 20 8E FD    |             JSR   {$FD8E}        
+  405 |  1 keplermatik.s    405 | Code        | 11 |         |    2 | 00/81FB : A0 00       |             LDY   #$00           
+  406 |  1 keplermatik.s    406 | Code        | 11 |         |    2 | 00/81FD : 91 06       |             STA   ({$06}),Y      
+  407 |  1 keplermatik.s    407 | Code        | 11 |         |    1 | 00/81FF : 60          |             RTS                  
+  408 |  1 keplermatik.s    408 | Empty       | 11 |         |    0 | 00/8200               |                                  
+  409 |  1 keplermatik.s    409 | Code        | 11 |         |    2 | 00/8200 : A0 00       | PRMEMFI2    LDY   #$00           
+  410 |  1 keplermatik.s    410 | Code        | 11 |         |    2 | 00/8202 : 91 06       |             STA   ({$06}),Y      ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
+  411 |  1 keplermatik.s    411 | Code        | 11 |         |    1 | 00/8204 : 60          |             RTS                  
+  412 |  1 keplermatik.s    412 | Empty       | 11 |         |    0 | 00/8205               |                                  
+  413 |  1 keplermatik.s    413 | Comment     | 11 |         |    0 | 00/8205               | *
+  414 |  1 keplermatik.s    414 | Comment     | 11 |         |    0 | 00/8205               | ********************************
+  415 |  1 keplermatik.s    415 | Comment     | 11 |         |    0 | 00/8205               | * DISABLE /RAM VOLUME TO FREE  *
+  416 |  1 keplermatik.s    416 | Comment     | 11 |         |    0 | 00/8205               | * AUX MEMORY FOR USE           *
+  417 |  1 keplermatik.s    417 | Comment     | 11 |         |    0 | 00/8205               | ********************************
+  418 |  1 keplermatik.s    418 | Empty       | 11 |         |    0 | 00/8205               |                                  
+  419 |  1 keplermatik.s    419 | Code        | 11 |         |    3 | 00/8205 : AD 98 BF    | REMOVE      LDA   $BF98          
+  420 |  1 keplermatik.s    420 | Code        | 11 |         |    2 | 00/8208 : 29 30       |             AND   #$30           
+  421 |  1 keplermatik.s    421 | Code        | 11 |         |    2 | 00/820A : C9 30       |             CMP   #$30           
+  422 |  1 keplermatik.s    422 | Code        | 11 |         |    2 | 00/820C : D0 10       |             BNE   NORAM          
+  423 |  1 keplermatik.s    423 | Code        | 11 |         |    3 | 00/820E : AD 26 BF    |             LDA   $BF26          
+  424 |  1 keplermatik.s    424 | Code        | 11 |         |    3 | 00/8211 : CD 16 BF    |             CMP   $BF16          
+  425 |  1 keplermatik.s    425 | Code        | 11 |         |    2 | 00/8214 : D0 0A       |             BNE   GOTRAM         
+  426 |  1 keplermatik.s    426 | Code        | 11 |         |    3 | 00/8216 : AD 27 BF    |             LDA   $BF27          
+  427 |  1 keplermatik.s    427 | Code        | 11 |         |    3 | 00/8219 : CD 17 BF    |             CMP   $BF17          
+  428 |  1 keplermatik.s    428 | Code        | 11 |         |    2 | 00/821C : D0 02       |             BNE   GOTRAM         
+  429 |  1 keplermatik.s    429 | Code        | 11 |         |    1 | 00/821E : 38          | NORAM       SEC                  
+  430 |  1 keplermatik.s    430 | Code        | 11 |         |    1 | 00/821F : 60          | OKXIT       RTS                  
+  431 |  1 keplermatik.s    431 | Code        | 11 |         |    3 | 00/8220 : AD 26 BF    | GOTRAM      LDA   $BF26          
+  432 |  1 keplermatik.s    432 | Code        | 11 |         |    3 | 00/8223 : 8D 63 82    |             STA   OLDVEC         
+  433 |  1 keplermatik.s    433 | Code        | 11 |         |    3 | 00/8226 : AD 27 BF    |             LDA   $BF27          
+  434 |  1 keplermatik.s    434 | Code        | 11 |         |    3 | 00/8229 : 8D 64 82    |             STA   OLDVEC+1       
+  435 |  1 keplermatik.s    435 | Code        | 11 |         |    3 | 00/822C : AD 16 BF    |             LDA   $BF16          
+  436 |  1 keplermatik.s    436 | Code        | 11 |         |    3 | 00/822F : 8D 26 BF    |             STA   $BF26          
+  437 |  1 keplermatik.s    437 | Code        | 11 |         |    3 | 00/8232 : AD 17 BF    |             LDA   $BF17          
+  438 |  1 keplermatik.s    438 | Code        | 11 |         |    3 | 00/8235 : 8D 27 BF    |             STA   $BF27          
+  439 |  1 keplermatik.s    439 | Code        | 11 |         |    3 | 00/8238 : AE 31 BF    |             LDX   $BF31          
+  440 |  1 keplermatik.s    440 | Code        | 11 |         |    3 | 00/823B : BD 32 BF    | DEVLP       LDA   $BF32,X        
+  441 |  1 keplermatik.s    441 | Code        | 11 |         |    2 | 00/823E : 29 70       |             AND   #$70           
+  442 |  1 keplermatik.s    442 | Code        | 11 |         |    2 | 00/8240 : C9 30       |             CMP   #$30           
+  443 |  1 keplermatik.s    443 | Code        | 11 |         |    2 | 00/8242 : F0 05       |             BEQ   GOTSLT         
+  444 |  1 keplermatik.s    444 | Code        | 11 |         |    1 | 00/8244 : CA          |             DEX                  
+  445 |  1 keplermatik.s    445 | Code        | 11 |         |    2 | 00/8245 : 10 F4       |             BPL   DEVLP          
+  446 |  1 keplermatik.s    446 | Code        | 11 |         |    2 | 00/8247 : 30 D5       |             BMI   NORAM          
+  447 |  1 keplermatik.s    447 | Code        | 11 |         |    3 | 00/8249 : BD 33 BF    | GOTSLT      LDA   $BF32+1,X      
+  448 |  1 keplermatik.s    448 | Code        | 11 |         |    3 | 00/824C : 9D 32 BF    |             STA   $BF32,X        
+  449 |  1 keplermatik.s    449 | Code        | 11 |         |    1 | 00/824F : E8          |             INX                  
+  450 |  1 keplermatik.s    450 | Code        | 11 |         |    3 | 00/8250 : EC 31 BF    |             CPX   $BF31          
+  451 |  1 keplermatik.s    451 | Code        | 11 |         |    2 | 00/8253 : B0 03       |             BCS   FINSLT         
+  452 |  1 keplermatik.s    452 | Code        | 11 |         |    3 | 00/8255 : 4C 49 82    |             JMP   GOTSLT         
+  453 |  1 keplermatik.s    453 | Code        | 11 |         |    3 | 00/8258 : CE 31 BF    | FINSLT      DEC   $BF31          
+  454 |  1 keplermatik.s    454 | Code        | 11 |         |    2 | 00/825B : A9 00       |             LDA   #$00           
+  455 |  1 keplermatik.s    455 | Code        | 11 |         |    3 | 00/825D : 9D 32 BF    |             STA   $BF32,X        
+  456 |  1 keplermatik.s    456 | Code        | 11 |         |    1 | 00/8260 : 18          |             CLC                  
+  457 |  1 keplermatik.s    457 | Code        | 11 |         |    2 | 00/8261 : 90 BC       |             BCC   OKXIT          
+  458 |  1 keplermatik.s    458 | Data        | 11 |         |    2 | 00/8263 : 00 00       | OLDVEC      DW    0              
+  459 |  1 keplermatik.s    459 | Empty       | 11 |         |    0 | 00/8265               |                                  
+  460 |  1 keplermatik.s    460 | Empty       | 11 |         |    0 | 00/8265               |                                  
+  461 |  1 keplermatik.s    461 | Comment     | 11 |         |    0 | 00/8265               | ********************************
+  462 |  1 keplermatik.s    462 | Comment     | 11 |         |    0 | 00/8265               | * PARAMS TABLE                 *
+  463 |  1 keplermatik.s    463 | Comment     | 11 |         |    0 | 00/8265               | ********************************
+  464 |  1 keplermatik.s    464 | Empty       | 11 |         |    0 | 00/8265               |                                  
+  465 |  1 keplermatik.s    465 | Data        | 11 |         |    1 | 00/8265 : 03          | PARAMS      DFB   3              
+  466 |  1 keplermatik.s    466 | Data        | 11 |         |    2 | 00/8266 : 6C 82       |             DW    FILENAME       
+  467 |  1 keplermatik.s    467 | Data        | 11 |         |    2 | 00/8268 : 00 82       |             DW    $8200          
+  468 |  1 keplermatik.s    468 | Data        | 11 |         |    2 | 00/826A : AA AA       |             DW    $AAAA          
+  469 |  1 keplermatik.s    469 | Comment     | 11 |         |    0 | 00/826C               | *
+  470 |  1 keplermatik.s    470 | Data        | 11 |         |    1 | 00/826C : 11          | FILENAME    DFB   {ozunid_1}-NAME
+  471 |  1 keplermatik.s    471 | Data        | 11 |         |   17 | 00/826D : AF C5 D8 C1 | NAME        ASC   "/EXAMPLES/MAP.BMP"
       |                         |             |    |         |      |           CD D0 CC C5 |
       |                         |             |    |         |      |           D3 AF CD C1 |
       |                         |             |    |         |      |           D0 AE C2 CD |
       |                         |             |    |         |      |           D0          |
-  466 |  1 keplermatik.s    466 | Empty       | 11 |         |    0 | 00/8272               | ozunid_1                         
-  467 |  1 keplermatik.s    466 | Equivalence | 11 |         |    0 | 00/8272               | ENDNAME     EQU   ozunid_1       
-  468 |  1 keplermatik.s    467 | Empty       | 11 |         |    0 | 00/8272               |                                  
+  472 |  1 keplermatik.s    472 | Empty       | 11 |         |    0 | 00/827E               | ozunid_1                         
+  473 |  1 keplermatik.s    472 | Equivalence | 11 |         |    0 | 00/827E               | ENDNAME     EQU   ozunid_1       
+  474 |  1 keplermatik.s    473 | Empty       | 11 |         |    0 | 00/827E               |                                  
 ------+-------------------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------
