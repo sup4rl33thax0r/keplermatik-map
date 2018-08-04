@@ -28,7 +28,7 @@ FILEBASE EQU   $4000
 BMPSTART EQU   $FA
 BMPPTR   EQU   $FC
 GFXPTR   EQU   $EB
-BMPEOR   EQU   $ED
+COLNUM   EQU   $ED
 YTEMP    EQU   $EF
 RAMPAGE  EQU   $06
 GFXTICK  EQU   $07
@@ -96,7 +96,7 @@ CLOSE    LDA   #1
 * initializes the pointers to both BMP *
 * (BMPSTART) and video RAM (GFXPTR).   *
 * It also initializes the end-of-row   *
-* pointer (BMPEOR).                    *
+* pointer (COLNUM).                    *
 *                                      *
 * The code then begins performing what *
 * we affectionately call "the pixel    *
@@ -214,12 +214,8 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          LDY   #GFXTICK           ; FRAMEBUFFER USES 7 BITS PER BYTE
          LDX   #BMPTICK           ; BMP FORMAT USES 8 BITS PER BYTE
          CLC
-BEGINROW LDA   BMPPTR         ; CALCULATE EOR + 1
-         ADC   #BMPROWL           ; HARDCODED FOR DOUBLE HIRES
-         STA   BMPEOR         ; WE CHECK FOR THIS LATER TO SEE
-         LDA   BMPPTR+1       ; IF WE'RE AT THE NEXT ROW AND NEED TO
-         ADC   #$00           ; INCREMENT GFXPTR
-         STA   BMPEOR+1
+BEGINROW LDA   #$46
+         STA   COLNUM
          LDA   #$00
          STA   GFXPTR
 
@@ -237,11 +233,11 @@ PIXPOKEY STY   YTEMP          ; TEMP STORE Y
          ROL   A              ; TAKE YOUR LEFT FOOT OUT
          STA   (GFXPTR),Y
          LDY   YTEMP
+         
          DEX                  ; DO THE PIXEL POKEY AND SHAKE
          BEQ   EORCHK         ; OUR CARRY BIT ALL ABOUT, THEN GO CHECK EOR IF X IS 0
 
-PIXPOKE2 
-         DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
+PIXPOKE2 DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
          BEQ   RSTGFXP        ; NEEDS TO BE RESET
          JMP   PIXPOKEY
 
@@ -266,12 +262,18 @@ RSTGFXP3 LDY   #$00
 
 DECBMP   SEC
          LDA   BMPPTR
-         SBC   #$8E
+         SBC   #$8D
          STA   BMPPTR
          LDA   BMPPTR+1
          SBC   #$00
          STA   BMPPTR+1
-         JSR   RSTEORP
+         LDX   #BMPTICK
+         
+         LDA   #$55
+         STA   RAMPAGE
+         LDY   #$00
+         STA   (RAMPAGE),Y
+         LDY   #GFXTICK
          JMP   PIXPOKEY
 
 INCBMPP  CLC                ;INCREMENT BMP POINTER
@@ -282,33 +284,25 @@ INCBMPP  CLC                ;INCREMENT BMP POINTER
          ADC   #$00
          STA   BMPPTR+1
          LDX   #BMPTICK
+         DEC   COLNUM
          RTS
 
 RSTBMPP  JSR   INCBMPP
          JMP   PIXPOKE2
 
-RSTEORP  ;JSR   INCBMPP 
-         CLC
-         LDA   BMPPTR
-         ADC   #BMPROWL
-         STA   BMPEOR
-         LDA   BMPPTR+1
-         ADC   #$00
-         STA   BMPEOR+1
-         RTS
+EORCHK   LDA   COLNUM     ; IF WE HAVEN'T JUST FINISHED THE ROW
+         CMP   #$01       ; MOVE ALONG 
+         BNE   RSTBMPP
+                          
+         LDA   #$46       ; RESET COLNUM COUNTER
+         STA   COLNUM
 
-EORCHK   LDA   BMPPTR     ; WE ARE HITTING ROW ONE BYTE EARLY
-         CMP   BMPEOR     ; CHANGE TO RUN OFF BMPPTR
-         BNE   RSTBMPP    ; EARLY CHECK LSB FOR END OF ROW
-         LDA   BMPPTR+1
-         CMP   BMPEOR+1
-         BNE   RSTBMPP    ; IF NOT AT END OF ROW, GO RESET BMPPTR
-
-                            ; SO YOU SAY WE'RE AT THE END OF ROW
-         LDA   GFXPTR+1     ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL *
+         LDA   GFXPTR+1   ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL
          CMP   #$3F       ; SORT OF CONDITIONS TO CHECK OUT
-         BNE   CHKBOXP
-         LDA   GFXPTR   ; CHECK LOW BYTE
+
+         BNE   CHKBOXP    ; IF NOT A GAP ROW, HANDLE AS NORMAL ROW
+
+         LDA   GFXPTR     ; CHECK LOW BYTE TO FIND WHICH GAP ROW
          CMP   #$A7       ; FIRST GAP IN FRAMEBUFFER MAP
          BEQ   GP3FA7
          CMP   #$CF       ; SECOND GAP IN FRAMEBUFFER MAP
@@ -316,7 +310,7 @@ EORCHK   LDA   BMPPTR     ; WE ARE HITTING ROW ONE BYTE EARLY
          CMP   #$F7       ; END OF FILE
          BEQ   DISPGFX
 
-CHKBOXP  LDA   GFXPTR
+CHKBOXP  LDA   GFXPTR     ; LOOK TO SEE IF WE ARE AT THE LAST ROW OF 8
          AND   #$3F       ; APPLY MASK FOR B00111111
          CMP   #$27       ; MASKED VALUE = B00100111?
          BEQ   CHKBOXP2
@@ -393,13 +387,18 @@ PRSTATUS STA   $C054
          JSR   PRBYTE
          LDA   BMPPTR
          JSR   PRBYTE
-         LDA   #$A0      ;' '
-         JSR   PRCHR
+
          LDA   #$C7      ;'G'
          JSR   PRCHR
          LDA   GFXPTR+1  ;PRINT GFX POINTER ADDRESS
          JSR   PRBYTE
          LDA   GFXPTR
+         JSR   PRBYTE
+         LDA   #$C3      ;'C'
+         JSR   PRCHR
+         LDA   COLNUM
+         JSR   PRBYTE
+         LDA   RAMPAGE
          JSR   PRBYTE
          JSR   CROUT
          LDY   #$00
