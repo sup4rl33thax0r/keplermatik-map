@@ -211,6 +211,11 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          LDA   #$75
          STA   BMPPTR+1
 
+         LDY   #$00
+         LDA   (BMPPTR),Y
+         EOR   #$FF
+         STA   (BMPPTR),Y
+
          LDY   #GFXTICK           ; FRAMEBUFFER USES 7 BITS PER BYTE
          LDX   #BMPTICK           ; BMP FORMAT USES 8 BITS PER BYTE
          CLC
@@ -218,19 +223,24 @@ BEGINROW LDA   #$46
          STA   COLNUM
          LDA   #$00
          STA   GFXPTR
+      
+
 
          
 
 PIXPOKEY STY   YTEMP          ; TEMP STORE Y
-         JSR   PRSTATUS   
+         ;JSR   PRSTATUS   
          LDY   #$00           ; RSTGFXP MAY BE RESETTING ON FIRST BYTE?
          CLC
          LDA   (BMPPTR),Y
-         ROR   A              ; PUT YOUR RIGHT FOOT IN
+         ROL   A              ; PUT YOUR RIGHT FOOT IN
+         ;STA   $C054
+         ;JSR   PRBIT
+         ;STA   RAMPAGE
          STA   (BMPPTR),Y
          LDY   #$00
          LDA   (GFXPTR),Y
-         ROL   A              ; TAKE YOUR LEFT FOOT OUT
+         ROR   A              ; TAKE YOUR LEFT FOOT OUT
          STA   (GFXPTR),Y
          LDY   YTEMP
          
@@ -241,7 +251,14 @@ PIXPOKE2 DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
          BEQ   RSTGFXP        ; NEEDS TO BE RESET
          JMP   PIXPOKEY
 
-RSTGFXP  LDA   RAMPAGE
+PIXPOKC1
+
+RSTGFXP  LDY   #$00
+         LDA   (GFXPTR),Y
+         ROR   A              ; RIGHT JUSTIFY BITS
+         STA   (GFXPTR),Y
+         LDY   YTEMP
+         LDA   RAMPAGE
          CMP   #$54
          BEQ   RSTGFXP2
          LDA   #$54
@@ -267,6 +284,12 @@ DECBMP   SEC
          LDA   BMPPTR+1
          SBC   #$00
          STA   BMPPTR+1
+
+         LDY   #$00
+         LDA   (BMPPTR),Y
+         EOR   #$FF
+         STA   (BMPPTR),Y
+
          LDX   #BMPTICK
          
          LDA   #$55
@@ -283,8 +306,18 @@ INCBMPP  CLC                ;INCREMENT BMP POINTER
          LDA   BMPPTR+1
          ADC   #$00
          STA   BMPPTR+1
+       
          LDX   #BMPTICK
          DEC   COLNUM
+
+         STY   YTEMP
+         LDY   #$00
+         LDA   (BMPPTR),Y
+         EOR   #$FF
+         STA   (BMPPTR),Y
+         LDY   YTEMP
+        
+
          RTS
 
 RSTBMPP  JSR   INCBMPP
@@ -293,7 +326,11 @@ RSTBMPP  JSR   INCBMPP
 EORCHK   LDA   COLNUM     ; IF WE HAVEN'T JUST FINISHED THE ROW
          CMP   #$01       ; MOVE ALONG 
          BNE   RSTBMPP
-                          
+         LDY   #$00
+         LDA   (GFXPTR),Y
+         ROR   A              ; RIGHT JUSTIFY BITS
+         STA   (GFXPTR),Y
+         LDY   YTEMP                 
          LDA   #$46       ; RESET COLNUM COUNTER
          STA   COLNUM
 
@@ -358,56 +395,19 @@ GP3FCF   LDA   #$50       ; JUMP GFXPTR FROM $3FCF TO $2050
          STA   GFXPTR+1
          JMP   DECBMP
 
+
 DISPGFX  LDA   $C057
          LDA   $C050
          LDA   $C05E
-         LDA   $C053
+         LDA   $C052
          STA   $C00D
          LDA   #$00
          STA   $C05E
          LDA   $C055
          RTS
 
-PRSTATUS STA   $C054
-         LDA   #$D8      ;'X'
-         JSR   PRCHR
-         TXA             ; PRINT BMP BIT COUNTER
-         JSR   PRBYTE
-         LDA   #$A0      ;' '
-         JSR   PRCHR
-         LDA   #$D9      ;'Y'
-         JSR   PRCHR
-         TYA             ; PRINT GFX BIT COUNTER
-         JSR   PRBYTE
-         LDA   #$A0      ;' '
-         JSR   PRCHR
-         LDA   #$C2      ;'B' 
-         JSR   PRCHR
-         LDA   BMPPTR+1  ;PRINT BMP POINTER ADDRESS
-         JSR   PRBYTE
-         LDA   BMPPTR
-         JSR   PRBYTE
 
-         LDA   #$C7      ;'G'
-         JSR   PRCHR
-         LDA   GFXPTR+1  ;PRINT GFX POINTER ADDRESS
-         JSR   PRBYTE
-         LDA   GFXPTR
-         JSR   PRBYTE
-         LDA   #$C3      ;'C'
-         JSR   PRCHR
-         LDA   COLNUM
-         JSR   PRBYTE
-         LDA   RAMPAGE
-         JSR   PRBYTE
-         JSR   CROUT
-         LDY   #$00
-         STA   (RAMPAGE),Y
-         RTS
 
-PRMEMFI2 LDY   #$00
-         STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
-         RTS
 
 *
 ********************************
