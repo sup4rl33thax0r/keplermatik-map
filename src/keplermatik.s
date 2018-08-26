@@ -203,15 +203,15 @@ LDGFX    LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
         ; LDA   #$20             ; INITIALIZE BMPPTR
          ;LDA   #$00
          ;ADC   BMPSTART 
-         LDA   #$F6        ; 16-BIT ADD $343A TO BMPSTART TO GET
-         STA   BMPPTR           ; START OF LINE 1 AND STORE IN BMPPTR
+         LDA   #$F6              ; 16-BIT ADD $343A TO BMPSTART TO GET
+         STA   BMPPTR            ; START OF LINE 1 AND STORE IN BMPPTR
          ;LDA   #$35             ; REMEMBER, FILE IS UPSIDE DOWN COMPARED
          ;LDA   #$00
          ;ADC   BMPSTART+1       ; TO FRAME BUFFER =)
          LDA   #$75
          STA   BMPPTR+1
 
-         LDY   #$00
+         LDY   #$00              ; INVERT BITS OF THE FIRST BYTE
          LDA   (BMPPTR),Y
          EOR   #$FF
          STA   (BMPPTR),Y
@@ -223,27 +223,18 @@ BEGINROW LDA   #$46
          STA   COLNUM
          LDA   #$00
          STA   GFXPTR
-      
-
-
-         
-
-PIXPOKEY STY   YTEMP          ; TEMP STORE Y
-         ;JSR   PRSTATUS   
-         LDY   #$00           ; RSTGFXP MAY BE RESETTING ON FIRST BYTE?
+              
+PIXPOKEY STY   YTEMP          ; TEMP STORE Y 
+         LDY   #$00           
          CLC
          LDA   (BMPPTR),Y
          ROL   A              ; PUT YOUR RIGHT FOOT IN
-         ;STA   $C054
-         ;JSR   PRBIT
-         ;STA   RAMPAGE
          STA   (BMPPTR),Y
          LDY   #$00
          LDA   (GFXPTR),Y
          ROR   A              ; TAKE YOUR LEFT FOOT OUT
          STA   (GFXPTR),Y
-         LDY   YTEMP
-         
+         LDY   YTEMP        
          DEX                  ; DO THE PIXEL POKEY AND SHAKE
          BEQ   EORCHK         ; OUR CARRY BIT ALL ABOUT, THEN GO CHECK EOR IF X IS 0
 
@@ -251,13 +242,9 @@ PIXPOKE2 DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
          BEQ   RSTGFXP        ; NEEDS TO BE RESET
          JMP   PIXPOKEY
 
-PIXPOKC1
-
-RSTGFXP  LDY   #$00
-         LDA   (GFXPTR),Y
-         ROR   A              ; RIGHT JUSTIFY BITS
+RSTGFXP  LDA   (GFXPTR),Y
+         ROR   A              
          STA   (GFXPTR),Y
-         LDY   YTEMP
          LDA   RAMPAGE
          CMP   #$54
          BEQ   RSTGFXP2
@@ -269,13 +256,13 @@ RSTGFXP2 LDA   #$55
          STA   RAMPAGE
          INC   GFXPTR       
          CLC
+
 RSTGFXP3 LDY   #$00
-         STA   (RAMPAGE),Y   ; CHANGED FROM RAMPAGE+1 AS I THINK WAS A BUG
-         LDA   #$00          ;KLUGE
+         STA   (RAMPAGE),Y
+         LDA   #$00          
          STA   (GFXPTR),Y
          LDY   #GFXTICK
          JMP   PIXPOKEY
-
 
 DECBMP   SEC
          LDA   BMPPTR
@@ -317,7 +304,6 @@ INCBMPP  CLC                ;INCREMENT BMP POINTER
          STA   (BMPPTR),Y
          LDY   YTEMP
         
-
          RTS
 
 RSTBMPP  JSR   INCBMPP
@@ -326,11 +312,13 @@ RSTBMPP  JSR   INCBMPP
 EORCHK   LDA   COLNUM     ; IF WE HAVEN'T JUST FINISHED THE ROW
          CMP   #$01       ; MOVE ALONG 
          BNE   RSTBMPP
-         LDY   #$00
+
+         LDY   #$00       ; RIGHT JUSTIFY BITS
          LDA   (GFXPTR),Y
-         ROR   A              ; RIGHT JUSTIFY BITS
+         ROR   A              
          STA   (GFXPTR),Y
-         LDY   YTEMP                 
+         LDY   YTEMP       
+
          LDA   #$46       ; RESET COLNUM COUNTER
          STA   COLNUM
 
