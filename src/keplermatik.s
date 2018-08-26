@@ -13,8 +13,8 @@
 ********************************
 * VARIABLES                    *
 ********************************
-SCRATCH1 EQU   $08
-SCRATCH2 EQU   $09
+BMPBUFF EQU   $08
+GFXBUFF EQU   $09
 BELL     EQU   $FF3A
 MLI      EQU   $BF00
 OPENCMD  EQU   $C8
@@ -64,9 +64,9 @@ READ     LDA   PARAMS+5
          DFB   READCMD
          DW    PARAMS
          LDA   PARAMS+6
-         STA   SCRATCH1
+         STA   BMPBUFF
          LDA   PARAMS+7
-         STA   SCRATCH2
+         STA   GFXBUFF
          RTS
 CLOSE    LDA   #1
          STA   PARAMS
@@ -93,17 +93,17 @@ LDGFX    JSR   DISPGFX
          LDY   #$0A       ;GET BITMAP OFFSET FROM FILE POSITION $000A
 
          LDA   FILEBASE,Y ;CALCULATE START OF BMP AND STORE IN BMPSTART
-         STA   SCRATCH1
+         STA   BMPBUFF
          INY
          LDA   FILEBASE,Y
-         STA   SCRATCH2
+         STA   GFXBUFF
          CLC
          ;LDA   #<FILEBASE
-         ;ADC   SCRATCH1
+         ;ADC   BMPBUFF
          LDA   #$3E
          STA   BMPSTART
          ;LDA   #>FILEBASE
-         ;ADC   SCRATCH2
+         ;ADC   GFXBUFF
          LDA   #$40
          STA   BMPSTART+1
         
@@ -122,7 +122,7 @@ LDGFX    JSR   DISPGFX
          LDY   #$00              ; INVERT BITS OF THE FIRST BYTE
          LDA   (BMPPTR),Y
          EOR   #$FF
-         STA   (BMPPTR),Y
+         STA   BMPBUFF
 
          LDY   #GFXTICK           ; FRAMEBUFFER USES 7 BITS PER BYTE
          LDX   #BMPTICK           ; BMP FORMAT USES 8 BITS PER BYTE
@@ -134,13 +134,8 @@ BEGINROW LDA   #$46
               
 PIXPOKEY STY   YTEMP          ; TEMP STORE Y 
          LDY   #$00           
-         LDA   (BMPPTR),Y
-         ROL   A              ; PUT YOUR RIGHT FOOT IN
-         STA   (BMPPTR),Y
-         LDY   #$00
-         LDA   (GFXPTR),Y
-         ROR   A              ; TAKE YOUR LEFT FOOT OUT
-         STA   (GFXPTR),Y
+         ROL   BMPBUFF        ; PUT YOUR RIGHT FOOT IN
+         ROR   GFXBUFF        ; TAKE YOUR LEFT FOOT OUT
          LDY   YTEMP        
          DEX                  ; DO THE PIXEL POKEY AND SHAKE
          BEQ   EORCHK         ; OUR CARRY BIT ALL ABOUT, THEN GO CHECK EOR IF X IS 0
@@ -149,8 +144,8 @@ PIXPOKE2 DEY                  ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
          BEQ   RSTGFXP        ; NEEDS TO BE RESET
          JMP   PIXPOKEY
 
-RSTGFXP  LDA   (GFXPTR),Y     ; RIGHT JUSTIFY BITS, DON'T NEED TO SET Y TO ZERO AS WE
-         ROR   A              ; GOT HERE BECAUSE IT ALREADY IS
+RSTGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS, DON'T NEED TO SET Y TO ZERO AS WE
+         LDA   GFXBUFF        ; GOT HERE BECAUSE IT ALREADY IS
          STA   (GFXPTR),Y
          LDA   RAMPAGE
 
@@ -183,7 +178,7 @@ DECBMP   SEC
          LDY   #$00
          LDA   (BMPPTR),Y
          EOR   #$FF
-         STA   (BMPPTR),Y
+         STA   BMPBUFF
 
          LDX   #BMPTICK
          
@@ -209,7 +204,7 @@ INCBMPP  CLC                ;INCREMENT BMP POINTER
          LDY   #$00
          LDA   (BMPPTR),Y
          EOR   #$FF
-         STA   (BMPPTR),Y
+         STA   BMPBUFF
          LDY   YTEMP
         
          RTS
@@ -222,8 +217,9 @@ EORCHK   LDA   COLNUM     ; IF WE HAVEN'T JUST FINISHED THE ROW
          BNE   RSTBMPP
 
          LDY   #$00       ; RIGHT JUSTIFY BITS
-         LDA   (GFXPTR),Y
-         ROR   A              
+         ROR   GFXBUFF
+         LDA   GFXBUFF
+         ;ROR   A              
          STA   (GFXPTR),Y
          LDY   YTEMP       
 
