@@ -12,3 +12,33 @@ When the BMP counter (X) hits zero, we check to see if we're at the end of the B
 Essentially, there is non-intuitive but regular structure to the DHGR memory map.  First, rows are set up in 8 row blocks where the rows are $0400 away from one another.  In our implementation, this puts row 0 at  $2000, row 1 at $2400, and so on.
 
 These
+
+
+***************************
+*                   Write *
+*                   ----- *
+* 80STORE    off    $C000 *
+*            on     $C001 *
+* RAMRD      off    $C002 *
+*            on     $C003 *   
+* RAMWRT     off    $C004 *    
+*            on     $C005 *
+* PAGE2      off    $C054 *
+*            on     $C055 *
+* HIRES      off    $C056 *
+*            on     $C057 *
+***************************
+* For AUX:                *
+* 80STORE ON: $C001       *
+* PAGE2   ON: $C055       *
+* HIRES   ON: $C057       *
+* RAMRD  OFF: $C002       *
+* RAMWRT OFF: $C004       *
+*                         *
+* For MAIN:               *
+* 80STORE ON: $C001       *
+* PAGE2  OFF: $C054       *
+* HIRES   ON: $C057       *
+* RAMRD  OFF: $C002       *
+* RAMWRT OFF: $C004       *
+***************************
