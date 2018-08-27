@@ -30,6 +30,11 @@ YTEMP    EQU   $EF
 RAMPAGE  EQU   $06
 BMPBIT   EQU   $FE
 GFXBIT   EQU   $CE
+CONST1   EQU   $D7
+
+CROUT    EQU   $FD8E
+PRBYTE   EQU   $FDDA
+PRCHR    EQU   $FDED
 
 VAR2     EQU   $CF
 
@@ -81,6 +86,8 @@ CLOSE    LDA   #1
          RTS
 
 LDGFX    JSR   DISPGFX
+         LDA   #$01
+         STA   CONST1
          LDA   #<GFXBASE  ;INITIALIZE GFXPTR WITH FRAME BUFFER ADDRESS
          STA   GFXPTR
          LDA   #>GFXBASE
@@ -96,6 +103,7 @@ LDGFX    JSR   DISPGFX
          STA   $C057      ;HIRES ON
          LDX   #$00       ;SET UP INCREMENTS TO 0
          LDA   #$00
+        
          STA   BMPBIT
 
          LDY   #$0A       ;GET BITMAP OFFSET FROM FILE POSITION $000A
@@ -132,115 +140,84 @@ LDGFX    JSR   DISPGFX
          EOR   #$FF
          STA   BMPBUFF
 
-         LDA   #GFXTICK
+         LDA   #$07
          STA   GFXBIT
  
-         LDA   #BMPTICK
+         LDA   #$08
          STA   BMPBIT
-
-BEGINROW LDA   #$46
-         STA   COLNUM
-         LDA   #$00
-         STA   GFXPTR
               
 PIXPOKEY ROL   BMPBUFF        ; PUT YOUR RIGHT FOOT IN
-         ROR   GFXBUFF        ; TAKE YOUR LEFT FOOT OUT     
-         DEC   BMPBIT         ; DO THE PIXEL POKEY AND SHAKE
-         BEQ   EORCHK         ; OUR CARRY BIT ALL ABOUT, THEN GO CHECK EOR IF X IS 0
+         ROR   GFXBUFF        ; TAKE YOUR LEFT FOOT OUT    
+         DEC   BMPBIT         ; DO THE PIXEL POKEY AND SHAKE OUR CARRY BIT ALL ABOUT
+         BEQ   EORCHK         ; THEN GO CHECK EOR IF WE REACH END OF BMP BYTE
 
-PIXPOKE2                      ; NOT AT END OF ROW, SEE IF GFXPTR OFFSET
-         DEC   GFXBIT
-         BEQ   RSTGFXP        ; NEEDS TO BE RESET
-         JMP   PIXPOKEY
+PIXPOKE2 DEC   GFXBIT
+         BEQ   INCGFXP        ; IF WE HAVE REACHED END OF GFX BYTE GO INCREMENT POINTER
+         JMP   PIXPOKEY       ; ELSE LOAD ANOTHER BIT
 
-RSTGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS, DON'T NEED TO SET Y TO ZERO AS WE
-         LDA   GFXBUFF        ; GOT HERE BECAUSE IT ALREADY IS
+INCGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS
+         LDA   GFXBUFF
+
+         STY   YTEMP
+         LDY   #$00   
          STA   (GFXPTR),Y
-         LDA   RAMPAGE
+         LDY   YTEMP
 
-         CMP   #$54           ; FLIP MEMORY BANK BY SWAPPING THE LOW BYTE OF RAMPAGE
-         BEQ   RSTGFXP2       ; BETWEEN $54 AND $55.  HIGH BYTE OF RAMPAGE CONTAINS
-         LDA   #$54           ; $C0, SO STA RAMPAGE TOGGLES THE MEMORY BANK SOFT SWITCH.
-         STA   RAMPAGE
-         JMP   RSTGFXP3
+         TXA
+         BIT   CONST1
+         BEQ   INCGFXP2
+         INX
+         STA   $C055
+         INC   GFXPTR
+         JMP   INCGFXP3
 
-RSTGFXP2 LDA   #$55
-         STA   RAMPAGE
-         INC   GFXPTR       
-         CLC
+INCGFXP2 INX
+         STA   $C054
 
-RSTGFXP3 LDY   #$00
-         STA   (RAMPAGE),Y
-         
-         LDA   #GFXTICK
+INCGFXP3 LDA   #$07
          STA   GFXBIT
-
          JMP   PIXPOKEY
 
 DECBMP   SEC
          LDA   BMPPTR
-         SBC   #$8D
+         SBC   #$48
          STA   BMPPTR
          LDA   BMPPTR+1
          SBC   #$00
          STA   BMPPTR+1
-
+         
          LDY   #$00
          LDA   (BMPPTR),Y
          EOR   #$FF
          STA   BMPBUFF
-
-         
-         
-         LDA   #BMPTICK
+   
+         LDA   #$08
          STA   BMPBIT
-
-         LDA   #$55
-         STA   RAMPAGE
-         STA   (RAMPAGE),Y
+         LDX   #$00
         
-         LDA   #GFXTICK
+         STA    $C055
+
+         LDA   #$07
          STA   GFXBIT
          JMP   PIXPOKEY
 
-INCBMPP  CLC                ;INCREMENT BMP POINTER
-         LDA   BMPPTR
-         ADC   #$01
-         STA   BMPPTR
-         LDA   BMPPTR+1
-         ADC   #$00
-         STA   BMPPTR+1
-       
-         ;LDX   #BMPTICK
-         LDA   #BMPTICK
+INCBMPP  INY
+         LDA   #$08
          STA   BMPBIT
 
-         DEC   COLNUM
-
-         STY   YTEMP
-         LDY   #$00
          LDA   (BMPPTR),Y
          EOR   #$FF
          STA   BMPBUFF
-         LDY   YTEMP
-        
-         RTS
-
-RSTBMPP  JSR   INCBMPP
          JMP   PIXPOKE2
 
-EORCHK   LDA   COLNUM     ; IF WE HAVEN'T JUST FINISHED THE ROW
-         CMP   #$01       ; MOVE ALONG 
-         BNE   RSTBMPP
-
+EORCHK   CPY   #$45       ; IF WE HAVEN'T JUST FINISHED THE ROW
+         BNE   INCBMPP    ; MOVE ALONG 
+         STY   YTEMP
          LDY   #$00       ; RIGHT JUSTIFY BITS
          ROR   GFXBUFF
          LDA   GFXBUFF            
          STA   (GFXPTR),Y
          LDY   YTEMP       
-
-         LDA   #$46       ; RESET COLNUM COUNTER
-         STA   COLNUM
 
          LDA   GFXPTR+1   ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL
          CMP   #$3F       ; SORT OF CONDITIONS TO CHECK OUT
