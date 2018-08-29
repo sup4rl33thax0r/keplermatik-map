@@ -158,7 +158,7 @@ INCGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS.  DHGR PIXELS ARE STORED IN
          LDA   GFXBUFF        ; LOAD OUR BUFFER IN A
          STY   YTEMP          ; STASH Y FOR A FEW CLOCKS WHILE WE USE INDIRECT
          LDY   #$00           ; ADDRESSING, THIS ALWAYS STRIKES ME AS HACKISH
-         STA   (GFXPTR),Y     ; STORE OUR BUFFER TO GFX MEMORY
+         STA   (GFXPTR),Y     ; STORE GFX BUFFER TO VIDEO MEMORY
          LDY   YTEMP          ; RESTORE Y
 
          TXA                  ; WE USE X TO KEEP TRACK OF OUR MEMORY BANK.
@@ -176,7 +176,7 @@ INCGFXP3 LDA   #$07           ; RESET OUR GFX BIT COUNTER
          STA   GFXBIT
          JMP   PIXPOKEY       ; BACK TO THE PIXEL POKEY
 
-DECBMP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
+BMPHOP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
          LDA   BMPPTR         ; READING OUR BMP FILE BACKWARDS TO FORWARD
          SBC   #$48           ; THE TOP LINES OF THE BMP ARE AT THE END
          STA   BMPPTR         ; SO WE WILL HOP BACK ONE LINE BY SUBTRACTING
@@ -184,55 +184,55 @@ DECBMP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
          SBC   #$00           ; (560) BUT THERE ARE TWO PAD BYTES AT THE END OF
          STA   BMPPTR+1       ; EACH LINE SO WE HOP BACK $48.
          
-         LDY   #$00           ; 
-         LDA   (BMPPTR),Y
-         EOR   #$FF
-         STA   BMPBUFF
+         LDY   #$00           ; PULL THE NEXT BMP BYTE OUT OF MEMORY
+         LDA   (BMPPTR),Y     
+         EOR   #$FF           ; INVERT BITS
+         STA   BMPBUFF        ; PUT THEM IN OUR BMP BUFFER
    
-         LDA   #$08
+         LDA   #$08           ; RESET BMP BIT COUNTER
          STA   BMPBIT
-         LDX   #$00
+         LDX   #$00           ; RESET X FOR BANK TRACKING
         
-         STA    $C055
+         STA    $C055         ; SET TO USE AUX MEMORY BANK
 
-         LDA   #$07
+         LDA   #$07           ; RESET GFX BIT COUNTER
          STA   GFXBIT
          JMP   PIXPOKEY
 
-INCBMPP  INY
-         LDA   #$08
+INCBMPP  INY                  ; INCREMENT OFFSET FOR BMP BYTE
+         LDA   #$08           ; RESET BMP BIT COUNTER
          STA   BMPBIT
 
-         LDA   (BMPPTR),Y
-         EOR   #$FF
-         STA   BMPBUFF
+         LDA   (BMPPTR),Y     ; PULL THE NEXT BMP BYTE OUT OF MEMORY
+         EOR   #$FF           ; INVERT BITS
+         STA   BMPBUFF        ; PUT THEM IN OUR BMP BUFFER
          JMP   PIXPOKE2
 
-EORCHK   CPY   #$45       ; IF WE HAVEN'T JUST FINISHED THE ROW
-         BNE   INCBMPP    ; MOVE ALONG 
-         STY   YTEMP
-         LDY   #$00       ; RIGHT JUSTIFY BITS
-         ROR   GFXBUFF
-         LDA   GFXBUFF            
+EORCHK   CPY   #$45           ; IF WE HAVEN'T JUST FINISHED THE ROW
+         BNE   INCBMPP        ; MOVE ALONG 
+         STY   YTEMP          ; STASH Y FOR A FEW CLOCKS
+         LDY   #$00       
+         ROR   GFXBUFF        ; RIGHT JUSTIFY BITS
+         LDA   GFXBUFF        ; STORE GFX BUFFER TO VIDEO MEMORY  
          STA   (GFXPTR),Y
-         LDY   YTEMP       
+         LDY   YTEMP          ; RESTORE Y
 
-         LDA   GFXPTR+1   ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL
-         CMP   #$3F       ; SORT OF CONDITIONS TO CHECK OUT
+         LDA   GFXPTR+1       ; HIGH BYTE OF GFXPTR BEING $3F RESULTS IN ALL
+         CMP   #$3F           ; SORT OF CONDITIONS TO CHECK OUT
 
-         BNE   CHKBOXP    ; IF NOT A GAP ROW, HANDLE AS NORMAL ROW
+         BNE   CHKBOXP        ; IF NOT A GAP ROW, HANDLE AS NORMAL ROW
 
-         LDA   GFXPTR     ; CHECK LOW BYTE TO FIND WHICH GAP ROW
-         CMP   #$A7       ; FIRST GAP IN FRAMEBUFFER MAP
+         LDA   GFXPTR         ; CHECK LOW BYTE TO FIND WHICH GAP ROW
+         CMP   #$A7           ; FIRST GAP IN FRAMEBUFFER MAP
          BEQ   GP3FA7
-         CMP   #$CF       ; SECOND GAP IN FRAMEBUFFER MAP
+         CMP   #$CF           ; SECOND GAP IN FRAMEBUFFER MAP
          BEQ   GP3FCF
-         CMP   #$F7       ; END OF FILE
+         CMP   #$F7           ; END OF FILE
          BEQ   DISPGFX
 
-CHKBOXP  LDA   GFXPTR     ; LOOK TO SEE IF WE ARE AT THE LAST ROW OF 8
-         AND   #$3F       ; APPLY MASK FOR B00111111
-         CMP   #$27       ; MASKED VALUE = B00100111?
+CHKBOXP  LDA   GFXPTR         ; LOOK TO SEE IF WE ARE AT THE LAST ROW OF 8
+         AND   #$3F           ; APPLY MASK FOR B00111111
+         CMP   #$27           ; MASKED VALUE = B00100111?
          BEQ   CHKBOXP2
          LDA   GFXPTR
          AND   #$7F
@@ -241,42 +241,42 @@ CHKBOXP  LDA   GFXPTR     ; LOOK TO SEE IF WE ARE AT THE LAST ROW OF 8
          LDA   GFXPTR
          AND   #$7F
          CMP   #$77
-         BNE   INCBOXP    ; IF NOT, GO TO THE NEXT OFFSET IN THE BOX
+         BNE   INCBOXP        ; IF NOT, GO TO THE NEXT OFFSET IN THE BOX
          
 CHKBOXP2 LDA   GFXPTR+1
-         AND   #$3C       ; APPLY MASK FOR B00111100
-         CMP   #$3C       ; MASKED VALUE = B00111100?
-         BEQ   RESBOXP    ; IF SO, RESET BOX OFFSET BACK TO 0
+         AND   #$3C           ; APPLY MASK FOR B00111100
+         CMP   #$3C           ; MASKED VALUE = B00111100?
+         BEQ   RESBOXP        ; IF SO, RESET BOX OFFSET BACK TO 0
 
-INCBOXP  CLC              ; INCREMENT GFXPTR BY THE BOX LINE OFFSET
-         LDA   GFXPTR     ; BOX LINE OFFSETS ARE $0400 APART BUT ONLY
-         ADC   #$D9       ; $03D9 FROM THE END OF ONE LINE TO THE
-         STA   GFXPTR     ; BEGINNING OF THE NEXT
+INCBOXP  CLC                  ; INCREMENT GFXPTR BY THE BOX LINE OFFSET
+         LDA   GFXPTR         ; BOX LINE OFFSETS ARE $0400 APART BUT ONLY
+         ADC   #$D9           ; $03D9 FROM THE END OF ONE LINE TO THE
+         STA   GFXPTR         ; BEGINNING OF THE NEXT
          LDA   GFXPTR+1
          ADC   #$03
          STA   GFXPTR+1
-         JMP   DECBMP
+         JMP   BMPHOP
 
-RESBOXP  SEC              ; RESET BOX LINE OFFSET BY JUMPING TO THE
-         LDA   GFXPTR     ; NEXT FRAMEBUFFER OFFSET WHERE BOX LINE
-         SBC   #$A7       ; OFFSET IS ZERO
+RESBOXP  SEC                  ; RESET BOX LINE OFFSET BY JUMPING TO THE
+         LDA   GFXPTR         ; NEXT FRAMEBUFFER OFFSET WHERE BOX LINE
+         SBC   #$A7           ; OFFSET IS ZERO
          STA   GFXPTR
          LDA   GFXPTR+1
          SBC   #$1B
          STA   GFXPTR+1
-         JMP   DECBMP
+         JMP   BMPHOP
 
-GP3FA7   LDA   #$28       ; JUMP GFXPTR FROM $3FA7 TO $2028
+GP3FA7   LDA   #$28           ; JUMP GFXPTR FROM $3FA7 TO $2028
          STA   GFXPTR
          LDA   #$20
          STA   GFXPTR+1
-         JMP   DECBMP
+         JMP   BMPHOP
 
-GP3FCF   LDA   #$50       ; JUMP GFXPTR FROM $3FCF TO $2050
+GP3FCF   LDA   #$50           ; JUMP GFXPTR FROM $3FCF TO $2050
          STA   GFXPTR
          LDA   #$20
          STA   GFXPTR+1
-         JMP   DECBMP
+         JMP   BMPHOP
 
 
 DISPGFX  LDA   $C057
