@@ -92,23 +92,20 @@ LDGFX    JSR   DISPGFX
          STA   GFXPTR
          LDA   #>GFXBASE
          STA   GFXPTR+1
-         LDA   #$C0
-         STA   RAMPAGE+1
-         LDA   #$55
-         STA   RAMPAGE
-         STA   $C001      ;80STORE ON
-         STA   $C002      ;RAMRD OFF
-         STA   $C004      ;RAMWRT OFF
-         STA   $C055      ;PAGE2 ON
-         STA   $C057      ;HIRES ON
-         LDX   #$00       ;SET UP INCREMENTS TO 0
-         LDA   #$00
-        
+         
+         STA   $C001      ; 80STORE ON
+         STA   $C002      ; RAMRD OFF
+         STA   $C004      ; RAMWRT OFF
+         STA   $C055      ; PAGE2 ON
+         STA   $C057      ; HIRES ON
+         LDX   #$00       ; INITIALIZE X REG, USED FOR TRACKING BANK SWITCHING
+         
+         LDA   #$00       ; INITIALIZE BMP BIT COUNTER
          STA   BMPBIT
 
-         LDY   #$0A       ;GET BITMAP OFFSET FROM FILE POSITION $000A
+         LDY   #$0A       ; GET BITMAP OFFSET FROM FILE POSITION $000A
 
-         LDA   FILEBASE,Y ;CALCULATE START OF BMP AND STORE IN BMPSTART
+         LDA   FILEBASE,Y ; CALCULATE START OF BMP AND STORE IN BMPSTART
          STA   BMPBUFF
          INY
          LDA   FILEBASE,Y
@@ -147,46 +144,47 @@ LDGFX    JSR   DISPGFX
          STA   BMPBIT
               
 PIXPOKEY ROL   BMPBUFF        ; PUT YOUR RIGHT FOOT IN
-         ROR   GFXBUFF        ; TAKE YOUR LEFT FOOT OUT    
-         DEC   BMPBIT         ; DO THE PIXEL POKEY AND SHAKE OUR CARRY BIT ALL ABOUT
+         ROR   GFXBUFF        ; TAKE YOUR LEFT FOOT OUT, DO THE PIXEL POKEY    
+         DEC   BMPBIT         ; AND SHAKE OUR CARRY BIT ALL ABOUT
          BEQ   EORCHK         ; THEN GO CHECK EOR IF WE REACH END OF BMP BYTE
 
-PIXPOKE2 DEC   GFXBIT
-         BEQ   INCGFXP        ; IF WE HAVE REACHED END OF GFX BYTE GO INCREMENT POINTER
+PIXPOKE2 DEC   GFXBIT         ; ONE GFX BIT DOWN, (7-N) TO GO
+         BEQ   INCGFXP        ; IF END OF GFX BYTE GO INCREMENT POINTER
          JMP   PIXPOKEY       ; ELSE LOAD ANOTHER BIT
 
-INCGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS
-         LDA   GFXBUFF
-
-         STY   YTEMP
-         LDY   #$00   
-         STA   (GFXPTR),Y
-         LDY   YTEMP
-
-         TXA
-         BIT   CONST1
-         BEQ   INCGFXP2
-         INX
-         STA   $C055
-         INC   GFXPTR
-         JMP   INCGFXP3
-
-INCGFXP2 INX
-         STA   $C054
-
-INCGFXP3 LDA   #$07
-         STA   GFXBIT
-         JMP   PIXPOKEY
-
-DECBMP   SEC
-         LDA   BMPPTR
-         SBC   #$48
-         STA   BMPPTR
-         LDA   BMPPTR+1
-         SBC   #$00
-         STA   BMPPTR+1
+INCGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS.  DHGR PIXELS ARE STORED IN
+                              ; BITS 1-7, Apple ][ VIDEO HARDWARE IGNORES BIT 0
          
-         LDY   #$00
+         LDA   GFXBUFF        ; LOAD OUR BUFFER IN A
+         STY   YTEMP          ; STASH Y FOR A FEW CLOCKS WHILE WE USE INDIRECT
+         LDY   #$00           ; ADDRESSING, THIS ALWAYS STRIKES ME AS HACKISH
+         STA   (GFXPTR),Y     ; STORE OUR BUFFER TO GFX MEMORY
+         LDY   YTEMP          ; RESTORE Y
+
+         TXA                  ; WE USE X TO KEEP TRACK OF OUR MEMORY BANK.
+         BIT   CONST1         ; BIT COMPARE TO $01 TELLS US IF ODD OR EVEN
+         BEQ   INCGFXP2       ; IF EVEN, BRANCH TO SET $C054
+         INX                  ; INCREMENT X, NEXT ONE WILL BE EVEN!
+         STA   $C055          ; SET $C055 SOFT SWITCH (AUX MEMORY)
+         INC   GFXPTR         ; MOVE TO THE NEXT GFX BYTE
+         JMP   INCGFXP3       ; GO FINISH
+
+INCGFXP2 INX                  ; INCREMENT X, NEXT ONE WILL BE ODD!
+         STA   $C054          ; SET $C054 SOFT SWITCH (MAIN MEMORY)
+
+INCGFXP3 LDA   #$07           ; RESET OUR GFX BIT COUNTER
+         STA   GFXBIT
+         JMP   PIXPOKEY       ; BACK TO THE PIXEL POKEY
+
+DECBMP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
+         LDA   BMPPTR         ; READING OUR BMP FILE BACKWARDS TO FORWARD
+         SBC   #$48           ; THE TOP LINES OF THE BMP ARE AT THE END
+         STA   BMPPTR         ; SO WE WILL HOP BACK ONE LINE BY SUBTRACTING
+         LDA   BMPPTR+1       ; $48.  THE ACTUAL LENGTH OF THE LINE IS $46
+         SBC   #$00           ; (560) BUT THERE ARE TWO PAD BYTES AT THE END OF
+         STA   BMPPTR+1       ; EACH LINE SO WE HOP BACK $48.
+         
+         LDY   #$00           ; 
          LDA   (BMPPTR),Y
          EOR   #$FF
          STA   BMPBUFF
