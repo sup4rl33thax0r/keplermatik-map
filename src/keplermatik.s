@@ -238,8 +238,6 @@ CHKBOXP  LDA   GFXPTR         ; LOOK TO SEE IF WE ARE AT THE LAST ROW OF 8
          AND   #$7F
          CMP   #$4F
          BEQ   CHKBOXP2
-         LDA   GFXPTR
-         AND   #$7F
          CMP   #$77
          BNE   INCBOXP        ; IF NOT, GO TO THE NEXT OFFSET IN THE BOX
          
