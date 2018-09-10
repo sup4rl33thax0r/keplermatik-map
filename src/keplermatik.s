@@ -1,13 +1,12 @@
 ********************************
-* KEPLERMATIK 0.1              *
-* ===============              *
+* KEPLERMATIK-BMP 0.1          *
+* ===================          *
 * LOADS MAP.BMP FROM DISK TO   *
 * $4000, THEN DE-INTERLEAVES   *
 * ALTERNATE BYTES TO $2000 IN  *
 * MAIN MEMORY AND AUX MEMORY   *
 ********************************
-* TODO:  FIX AUX/MAIN RAM FLAGS*
-********************************
+
 
          ORG   $8000
 ********************************
@@ -158,11 +157,7 @@ INCGFXP  ROR   GFXBUFF        ; RIGHT JUSTIFY BITS.  DHGR PIXELS ARE STORED IN
          LDA   GFXBUFF        ; LOAD OUR BUFFER IN A
          STY   YTEMP          ; STASH Y FOR A FEW CLOCKS WHILE WE USE INDIRECT
          LDY   #$00           ; ADDRESSING, THIS ALWAYS STRIKES ME AS HACKISH
-<<<<<<< HEAD
-         STA   (GFXPTR),Y     ; STORE OUR BUFFER TO GFX MEMORY
-=======
          STA   (GFXPTR),Y     ; STORE GFX BUFFER TO VIDEO MEMORY
->>>>>>> 843c1f61663ca639d0e81757c993604891e41152
          LDY   YTEMP          ; RESTORE Y
 
          TXA                  ; WE USE X TO KEEP TRACK OF OUR MEMORY BANK.
@@ -180,11 +175,7 @@ INCGFXP3 LDA   #$07           ; RESET OUR GFX BIT COUNTER
          STA   GFXBIT
          JMP   PIXPOKEY       ; BACK TO THE PIXEL POKEY
 
-<<<<<<< HEAD
-DECBMP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
-=======
 BMPHOP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
->>>>>>> 843c1f61663ca639d0e81757c993604891e41152
          LDA   BMPPTR         ; READING OUR BMP FILE BACKWARDS TO FORWARD
          SBC   #$48           ; THE TOP LINES OF THE BMP ARE AT THE END
          STA   BMPPTR         ; SO WE WILL HOP BACK ONE LINE BY SUBTRACTING
@@ -192,17 +183,10 @@ BMPHOP   SEC                  ; WE WANT TO FILL TOP TO BOTTOM SO THAT MEANS
          SBC   #$00           ; (560) BUT THERE ARE TWO PAD BYTES AT THE END OF
          STA   BMPPTR+1       ; EACH LINE SO WE HOP BACK $48.
          
-<<<<<<< HEAD
-         LDY   #$00           ; 
-         LDA   (BMPPTR),Y
-         EOR   #$FF
-         STA   BMPBUFF
-=======
          LDY   #$00           ; PULL THE NEXT BMP BYTE OUT OF MEMORY
          LDA   (BMPPTR),Y     
          EOR   #$FF           ; INVERT BITS
          STA   BMPBUFF        ; PUT THEM IN OUR BMP BUFFER
->>>>>>> 843c1f61663ca639d0e81757c993604891e41152
    
          LDA   #$08           ; RESET BMP BIT COUNTER
          STA   BMPBIT
